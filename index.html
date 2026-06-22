@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>100 Ngày Ngữ Pháp · English in 100 Days</title>
+<style>
+  :root{
+    --paper: #f6f1e7;
+    --paper-deep: #efe7d6;
+    --ink: #1f2a37;
+    --ink-soft: #4b5563;
+    --navy: #1d3557;
+    --navy-deep: #14253f;
+    --gold: #c08a2e;
+    --rust: #b5512f;
+    --sage: #5c7a5e;
+    --line: #d8cdb4;
+    --card: #fffdf8;
+    --shadow: 0 1px 2px rgba(31,42,55,.06), 0 8px 24px rgba(31,42,55,.07);
+    --radius: 14px;
+    --serif: "Iowan Old Style","Palatino Linotype","Noto Serif","Georgia",serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
+    --mono: "SF Mono", "Menlo", monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(192,138,46,.05), transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(29,53,87,.04), transparent 45%);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  .app{max-width:760px;margin:0 auto;padding:0 16px;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(246,241,231,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:12px 0;
+  }
+  .topbar-inner{max-width:760px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .brand{display:flex;align-items:baseline;gap:8px;}
+  .brand-mark{
+    font-family:var(--serif);font-weight:700;font-size:19px;color:var(--navy);
+    letter-spacing:.2px;
+  }
+  .brand-sub{font-size:11px;color:var(--ink-soft);letter-spacing:.4px;}
+  .streak-pill{
+    display:flex;align-items:center;gap:6px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:999px;padding:6px 12px;
+    font-size:13px;font-weight:600;color:var(--rust);
+    box-shadow:var(--shadow);
+  }
+  .streak-pill .flame{font-size:14px;}
+
+  /* ---------- Hero / Progress ---------- */
+  .hero{padding:22px 0 14px;}
+  .hero-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:14px;}
+  .hero-title{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy-deep);line-height:1.25;}
+  .hero-title em{font-style:normal;color:var(--gold);}
+  .hero-meta{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+
+  .progress-track{
+    position:relative;height:10px;border-radius:6px;
+    background:var(--paper-deep);
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;border-radius:6px;
+    background:linear-gradient(90deg, var(--sage), var(--navy));
+    transition:width .5s ease;
+  }
+  .progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-top:6px;}
+
+  .day-rail{display:flex;gap:6px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none;}
+  .day-rail::-webkit-scrollbar{display:none;}
+  .day-chip{
+    flex:0 0 auto;width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;font-family:var(--mono);
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    cursor:pointer;transition:transform .15s ease,border-color .15s ease;
+  }
+  .day-chip:hover{transform:translateY(-2px);}
+  .day-chip.done{background:var(--sage);border-color:var(--sage);color:#fff;}
+  .day-chip.today{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 0 0 3px rgba(29,53,87,.18);}
+  .day-chip.locked{opacity:.4;cursor:not-allowed;}
+  .day-chip.unit-test{border-style:dashed;border-color:var(--rust);}
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px;margin-bottom:16px;
+  }
+  .card-today{
+    border-color:var(--navy);
+    background:linear-gradient(180deg, #fffefb, var(--card));
+  }
+  .lesson-eyebrow{
+    font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px;
+  }
+  .lesson-title{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--navy-deep);margin-bottom:4px;}
+  .lesson-title-en{font-size:13px;color:var(--ink-soft);font-style:italic;margin-bottom:14px;}
+  .level-tag{
+    display:inline-block;font-size:11px;font-weight:700;color:var(--navy);
+    background:rgba(29,53,87,.08);border-radius:6px;padding:3px 8px;margin-bottom:14px;
+  }
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    border-radius:10px;border:1px solid transparent;padding:11px 18px;
+    font-size:14px;font-weight:600;cursor:pointer;transition:transform .12s ease, opacity .12s ease;
+    font-family:var(--sans);
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--navy);color:#fff;}
+  .btn-primary:hover{background:var(--navy-deep);}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--navy);}
+  .btn-gold{background:var(--gold);color:#fff;}
+  .btn-block{width:100%;}
+  .btn-sm{padding:7px 12px;font-size:12.5px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  .skip-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    background:rgba(192,138,46,.08);border:1px dashed var(--gold);
+    border-radius:10px;padding:10px 14px;margin:14px 0;font-size:13px;color:var(--ink);
+  }
+
+  /* ---------- Sections inside lesson ---------- */
+  .section-label{
+    display:flex;align-items:center;gap:8px;
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--navy);margin:22px 0 10px;
+  }
+  .section-label .num{
+    width:20px;height:20px;border-radius:50%;background:var(--navy);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);
+  }
+  .explain-summary{font-size:14.5px;line-height:1.65;color:var(--ink);margin-bottom:14px;}
+  .rule-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;}
+  .rule-item{
+    background:var(--paper-deep);border-radius:10px;padding:12px 14px;border-left:3px solid var(--navy);
+  }
+  .rule-text{font-size:13.5px;font-weight:600;color:var(--navy-deep);margin-bottom:4px;}
+  .rule-example{font-size:13.5px;color:var(--ink-soft);font-style:italic;}
+  .mistakes-box{
+    margin-top:14px;background:rgba(181,81,47,.06);border:1px solid rgba(181,81,47,.25);
+    border-radius:10px;padding:12px 14px;
+  }
+  .mistakes-box .mb-title{font-size:12px;font-weight:700;color:var(--rust);text-transform:uppercase;margin-bottom:8px;letter-spacing:.4px;}
+  .mistakes-box ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;}
+  .mistakes-box li{font-size:13px;color:var(--ink);font-family:var(--mono);font-size:12.5px;}
+
+  .dialogue-box{display:flex;flex-direction:column;gap:10px;}
+  .dialogue-line{display:flex;gap:10px;align-items:flex-start;}
+  .dialogue-avatar{
+    flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+    background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;font-family:var(--serif);
+  }
+  .dialogue-bubble{background:var(--paper-deep);border-radius:12px;padding:10px 13px;flex:1;}
+  .dialogue-speaker{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:3px;}
+  .dialogue-en{font-size:14px;color:var(--ink);line-height:1.5;}
+  .dialogue-vi{font-size:12.5px;color:var(--ink-soft);margin-top:3px;}
+  .speak-btn{
+    flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
+    background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-size:13px;color:var(--navy);align-self:center;
+  }
+  .speak-btn:active{transform:scale(.9);}
+
+  .passage-box{
+    background:var(--paper-deep);border-radius:10px;padding:16px;font-size:14.5px;line-height:1.75;color:var(--ink);
+  }
+  .passage-box .ptitle{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--navy-deep);margin-bottom:8px;}
+
+  /* ---------- Exercise / Quiz ---------- */
+  .ex-item{
+    border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:var(--card);
+  }
+  .ex-q{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.5;}
+  .ex-hint{font-size:12px;color:var(--ink-soft);margin-top:6px;font-style:italic;}
+  .ex-input{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
+    font-size:14px;font-family:var(--sans);background:var(--paper);color:var(--ink);
+  }
+  .ex-input:focus{outline:none;border-color:var(--navy);background:#fff;}
+  .opt-grid{display:flex;flex-direction:column;gap:8px;}
+  .opt-btn{
+    text-align:left;padding:10px 13px;border-radius:8px;border:1px solid var(--line);
+    background:var(--paper);font-size:13.5px;cursor:pointer;color:var(--ink);transition:all .12s ease;
+  }
+  .opt-btn:hover{border-color:var(--navy);}
+  .opt-btn.selected{border-color:var(--navy);background:rgba(29,53,87,.08);font-weight:600;}
+  .opt-btn.correct{border-color:var(--sage);background:rgba(92,122,94,.14);font-weight:600;}
+  .opt-btn.wrong{border-color:var(--rust);background:rgba(181,81,47,.1);}
+  .ex-feedback{margin-top:10px;font-size:13px;padding:9px 12px;border-radius:8px;display:none;}
+  .ex-feedback.show{display:block;}
+  .ex-feedback.ok{background:rgba(92,122,94,.14);color:#2f4730;}
+  .ex-feedback.bad{background:rgba(181,81,47,.1);color:#7a3520;}
+  .ex-check{margin-top:10px;}
+
+  /* ---------- Footer nav within lesson ---------- */
+  .lesson-nav{display:flex;gap:10px;margin-top:18px;}
+  .lesson-nav .btn{flex:1;}
+
+  /* ---------- Bottom tab bar ---------- */
+  .tabbar{
+    position:fixed;bottom:0;left:0;right:0;z-index:50;
+    background:rgba(246,241,231,.96);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  }
+  .tab-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    background:none;border:none;color:var(--ink-soft);font-size:10.5px;font-family:var(--sans);
+    padding:6px 0;cursor:pointer;font-weight:600;
+  }
+  .tab-btn .ti{font-size:18px;}
+  .tab-btn.active{color:var(--navy);}
+
+  .view{display:none;padding-bottom:70px;}
+  .view.active{display:block;}
+
+  /* ---------- Setup modal ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(20,37,63,.55);z-index:100;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.hidden{display:none;}
+  .modal-box{
+    background:var(--card);border-radius:16px;padding:26px 22px;max-width:380px;width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+  }
+  .modal-box h2{font-family:var(--serif);font-size:21px;color:var(--navy-deep);margin:0 0 8px;}
+  .modal-box p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin:0 0 16px;}
+  .modal-box input{
+    width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;font-size:14px;margin-bottom:12px;
+    font-family:var(--sans);
+  }
+
+  /* ---------- Stats view ---------- */
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .stat-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;}
+  .stat-num{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy-deep);}
+  .stat-label{font-size:11px;color:var(--ink-soft);margin-top:2px;text-transform:uppercase;letter-spacing:.3px;}
+
+  .srs-item{
+    display:flex;justify-content:space-between;align-items:center;
+    border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:8px;background:var(--card);
+  }
+  .srs-item .srs-title{font-size:13.5px;font-weight:600;color:var(--ink);}
+  .srs-item .srs-due{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+  .box-dot{display:flex;gap:3px;}
+  .box-dot span{width:7px;height:7px;border-radius:50%;background:var(--line);}
+  .box-dot span.fill{background:var(--sage);}
+
+  .empty-state{text-align:center;padding:40px 16px;color:var(--ink-soft);}
+  .empty-state .ti{font-size:34px;margin-bottom:10px;}
+
+  @media (max-width:380px){
+    .hero-title{font-size:22px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="setupModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h2>Chào mừng 👋</h2>
+    <p>Nhập tên hoặc nickname để đồng bộ tiến độ học giữa MacBook và iPad qua Firebase. Dữ liệu chỉ dùng để lưu tiến trình cá nhân của bạn.</p>
+    <input type="text" id="userNameInput" placeholder="VD: Minh" maxlength="40">
+    <button class="btn btn-primary btn-block" id="setupStartBtn">Bắt đầu học</button>
+  </div>
+</div>
+
+<div class="app">
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">100 Ngày</span>
+        <span class="brand-sub">NGỮ&nbsp;PHÁP</span>
+      </div>
+      <div class="streak-pill"><span class="flame">🔥</span><span id="streakCount">0</span> ngày</div>
+    </div>
+  </div>
+
+  <!-- ============ VIEW: HOME ============ -->
+  <div class="view active" id="view-home">
+    <div class="hero">
+      <div class="hero-row">
+        <div>
+          <div class="hero-title">Ngày <em id="currentDayNum">1</em> / 100</div>
+          <div class="hero-meta" id="heroMeta">Sẵn sàng bắt đầu hành trình của bạn</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label"><span id="progressPct">0% hoàn thành</span><span id="progressDoneCount">0/100 ngày</span></div>
+
+      <div class="day-rail" id="dayRail"></div>
+    </div>
+
+    <div id="dueReviewBanner"></div>
+    <div id="lessonContainer"></div>
+  </div>
+
+  <!-- ============ VIEW: REVIEW (SRS) ============ -->
+  <div class="view" id="view-review">
+    <div class="hero">
+      <div class="hero-title" style="font-size:22px;">Ôn tập ngắt quãng</div>
+      <div class="hero-meta">Hệ thống nhắc bạn ôn đúng lúc sắp quên — theo nguyên lý Leitner.</div>
+    </div>
+    <div id="reviewContainer"></div>
+  </div>
+
+  <!-- ============ VIEW: STATS ============ -->
+  <div class="view" id="view-stats">
+    <div class="hero">
+      <div class="hero-title" style="font-size:22px;">Tiến độ của bạn</div>
+    </div>
+    <div class="stat-grid" id="statGrid"></div>
+    <div class="card">
+      <div class="section-label"><span class="num">✓</span>Lịch sử bài test tổng hợp</div>
+      <div id="testHistory"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="tabbar">
+  <button class="tab-btn active" data-view="home"><span class="ti">📘</span>Học</button>
+  <button class="tab-btn" data-view="review"><span class="ti">🔄</span>Ôn tập</button>
+  <button class="tab-btn" data-view="stats"><span class="ti">📊</span>Tiến độ</button>
+</div>
+
+<script>
+// ============================================================
+// FIREBASE SETUP (loaded dynamically so a failure here never
+// blocks the rest of the app — important when opened via file://
+// or with no network access)
+// ============================================================
+let initializeApp, getDatabase, ref, get, set, update, onValue;
+let fbApp, db, userId;
+let firebaseReady = false;
+
+// !!! THAY THẾ bằng config Firebase project mới của bạn (Project Settings > General > Your apps > SDK setup) !!!
+const firebaseConfig = {
+  apiKey: "AIzaSyB6YdAodoJNsZB2LNdQz7M5WLtgGH0dhXw",
+  authDomain: "english-grammar-100-days.firebaseapp.com",
+  databaseURL: "https://english-grammar-100-days-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "english-grammar-100-days",
+  storageBucket: "english-grammar-100-days.firebasestorage.app",
+  messagingSenderId: "657525186970",
+  appId: "1:657525186970:web:acdc29c1caa9864f645a23"
+};
+
+const isFileProtocol = window.location.protocol === "file:";
+const isConfigPlaceholder = firebaseConfig.apiKey === "YOUR_API_KEY";
+
+async function setupFirebase() {
+  if (isFileProtocol) {
+    console.warn("Đang mở qua file:// — bỏ qua Firebase, chỉ dùng lưu trữ trên máy (localStorage).");
+    return false;
+  }
+  if (isConfigPlaceholder) {
+    console.warn("Firebase config chưa được điền — chỉ dùng lưu trữ trên máy (localStorage).");
+    return false;
+  }
+  try {
+    const appMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const dbMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+    initializeApp = appMod.initializeApp;
+    getDatabase = dbMod.getDatabase;
+    ref = dbMod.ref; get = dbMod.get; set = dbMod.set; update = dbMod.update; onValue = dbMod.onValue;
+    fbApp = initializeApp(firebaseConfig);
+    db = getDatabase(fbApp);
+    return true;
+  } catch (e) {
+    console.warn("Firebase init thất bại, chuyển sang chỉ dùng lưu trữ trên máy.", e);
+    return false;
+  }
+}
+
+
+// ============================================================
+// LESSON DATA (inline — generated by build step / pasted in)
+// ============================================================
+// ============================================================
+// LESSONS DATA — DAYS 1-10 (Foundation: Sentence Basics)
+// Level: Near A2 → A2
+// ============================================================
+
+const ALL_LESSONS = [
+  // ---------------- DAY 1 ----------------
+  {
+    day: 1,
+    title: "Động từ TO BE (am/is/are)",
+    titleEn: "Verb TO BE",
+    level: "A1-A2",
+    explanation: {
+      summary: "Động từ \"to be\" (am/is/are) dùng để nói về trạng thái, đặc điểm, nghề nghiệp, cảm xúc của người/vật. Đây là động từ quan trọng nhất, xuất hiện trong gần như mọi câu giao tiếp.",
+      points: [
+        { rule: "I + am", example: "I am a Customer Success Manager. (Tôi là CSM.)" },
+        { rule: "He/She/It + is", example: "She is busy today. (Cô ấy bận hôm nay.)" },
+        { rule: "You/We/They + are", example: "We are ready for the call. (Chúng tôi đã sẵn sàng cho cuộc gọi.)" },
+        { rule: "Phủ định: am/is/are + not", example: "He isn't available right now. (Anh ấy hiện không rảnh.)" },
+        { rule: "Câu hỏi: Am/Is/Are + S...?", example: "Are you free tomorrow? (Bạn có rảnh ngày mai không?)" },
+        { rule: "Dạng rút gọn thường dùng khi nói/viết thân mật", example: "I'm, you're, he's, she's, it's, we're, they're, isn't, aren't" }
+      ],
+      commonMistakes: [
+        "❌ I is a manager. → ✅ I am a manager.",
+        "❌ She are busy. → ✅ She is busy.",
+        "❌ They is ready. → ✅ They are ready."
+      ]
+    },
+    dialogue: {
+      title: "Giới thiệu trong cuộc họp online",
+      lines: [
+        { speaker: "Anna", en: "Hi, I'm Anna. I'm the new Customer Success Manager for APJ.", vi: "Chào, tôi là Anna. Tôi là CSM mới phụ trách khu vực APJ." },
+        { speaker: "Minh", en: "Nice to meet you, Anna. I'm Minh. I'm responsible for the UAV product line.", vi: "Rất vui được gặp bạn, Anna. Tôi là Minh. Tôi phụ trách dòng sản phẩm UAV." },
+        { speaker: "Anna", en: "Great! Is this your first time working with international clients?", vi: "Tuyệt! Đây có phải lần đầu bạn làm việc với khách hàng quốc tế không?" },
+        { speaker: "Minh", en: "No, it isn't. I'm quite experienced in this area.", vi: "Không, không phải. Tôi khá có kinh nghiệm trong lĩnh vực này." }
+      ]
+    },
+    passage: {
+      title: "A Typical Workday",
+      text: "My name is Linh. I am a Customer Success Manager at a software company. My team is small, but we are very efficient. Every morning, I am at my desk by 8 AM. The clients are usually from different time zones, so the schedule is sometimes tricky. Today is busy because three contracts are due for renewal."
+    },
+    exercises: [
+      { type: "fill-blank", question: "She ___ a manager.", answer: "is", options: ["am", "is", "are"] },
+      { type: "fill-blank", question: "We ___ ready for the meeting.", answer: "are", options: ["am", "is", "are"] },
+      { type: "fill-blank", question: "I ___ from Vietnam.", answer: "am", options: ["am", "is", "are"] },
+      { type: "multiple-choice", question: "Chọn câu đúng:", answer: "They are busy today.", options: ["They is busy today.", "They are busy today.", "They am busy today."] },
+      { type: "multiple-choice", question: "Chọn câu phủ định đúng:", answer: "He isn't here.", options: ["He not is here.", "He isn't here.", "He don't is here."] },
+      { type: "translate", question: "Dịch sang tiếng Anh: 'Cô ấy không bận hôm nay.'", answer: "She isn't busy today.", hint: "She is + not + busy" },
+      { type: "rewrite", question: "Viết lại thành câu hỏi: 'You are free tomorrow.'", answer: "Are you free tomorrow?" }
+    ],
+    quiz: [
+      { question: "Chọn đáp án đúng: My manager ___ very supportive.", answer: "is", options: ["am", "is", "are"] },
+      { question: "Chọn đáp án đúng: ___ you available for a call at 3 PM?", answer: "Are", options: ["Am", "Is", "Are"] },
+      { question: "Câu nào đúng ngữ pháp?", answer: "I am not sure about the deadline.", options: ["I not am sure about the deadline.", "I am not sure about the deadline.", "I amn't sure about the deadline."] },
+      { question: "Điền từ: It ___ a great opportunity for our team.", answer: "is", options: ["am", "is", "are"] },
+      { question: "Dịch: 'Chúng tôi sẵn sàng.'", answer: "We are ready.", type: "translate" }
+    ]
+  },
+
+  // ---------------- DAY 2 ----------------
+  {
+    day: 2,
+    title: "Thì hiện tại đơn (Present Simple)",
+    titleEn: "Present Simple Tense",
+    level: "A1-A2",
+    explanation: {
+      summary: "Thì hiện tại đơn diễn tả thói quen, sự thật hiển nhiên, lịch trình cố định. Đây là thì dùng nhiều nhất trong giao tiếp công việc hàng ngày (mô tả quy trình, trách nhiệm công việc).",
+      points: [
+        { rule: "I/You/We/They + V (nguyên thể)", example: "I work in Customer Success. (Tôi làm việc ở bộ phận CS.)" },
+        { rule: "He/She/It + V-s/es", example: "She handles renewals every month. (Cô ấy xử lý gia hạn hợp đồng mỗi tháng.)" },
+        { rule: "Phủ định: don't/doesn't + V", example: "He doesn't work on weekends. (Anh ấy không làm việc cuối tuần.)" },
+        { rule: "Câu hỏi: Do/Does + S + V...?", example: "Does she handle APJ accounts? (Cô ấy có phụ trách tài khoản APJ không?)" },
+        { rule: "Dùng với trạng từ tần suất: always, usually, often, sometimes, rarely, never", example: "I always check emails in the morning." },
+        { rule: "Quy tắc thêm -s/-es: thường +s; tận cùng s,x,ch,sh,o thì +es; tận cùng y (phụ âm trước) → bỏ y +ies", example: "go→goes, watch→watches, study→studies" }
+      ],
+      commonMistakes: [
+        "❌ She work here. → ✅ She works here.",
+        "❌ He don't like it. → ✅ He doesn't like it.",
+        "❌ Does she works here? → ✅ Does she work here? (bỏ -s sau does)"
+      ]
+    },
+    dialogue: {
+      title: "Mô tả công việc hàng ngày",
+      lines: [
+        { speaker: "Tom", en: "What do you do every day at work?", vi: "Bạn làm gì mỗi ngày ở chỗ làm?" },
+        { speaker: "Linh", en: "I usually check client emails first, then I prepare renewal reports.", vi: "Tôi thường kiểm tra email khách hàng trước, sau đó chuẩn bị báo cáo gia hạn." },
+        { speaker: "Tom", en: "Does your team handle the whole APJ region?", vi: "Đội của bạn có phụ trách toàn bộ khu vực APJ không?" },
+        { speaker: "Linh", en: "Yes, it does. We manage renewals for over 50 clients.", vi: "Đúng vậy. Chúng tôi quản lý gia hạn cho hơn 50 khách hàng." }
+      ]
+    },
+    passage: {
+      title: "My Role in the Team",
+      text: "I work as a Customer Success Manager. Every day, I review the renewal pipeline and contact clients whose contracts expire soon. My manager usually reviews my reports on Fridays. Our team doesn't handle technical support directly; the support team does that. I often join calls with clients in different time zones, so my schedule changes a lot."
+    },
+    exercises: [
+      { type: "fill-blank", question: "She ___ (work) in the CS team.", answer: "works", hint: "thêm -s vì chủ ngữ là she" },
+      { type: "fill-blank", question: "They ___ (not/like) long meetings.", answer: "don't like" },
+      { type: "fill-blank", question: "___ he ___ (handle) APJ accounts?", answer: "Does he handle" },
+      { type: "multiple-choice", question: "Chọn câu đúng:", answer: "He doesn't work on Sundays.", options: ["He don't works on Sundays.", "He doesn't work on Sundays.", "He not works on Sundays."] },
+      { type: "translate", question: "Dịch: 'Cô ấy thường kiểm tra email vào buổi sáng.'", answer: "She usually checks emails in the morning." },
+      { type: "rewrite", question: "Viết câu phủ định: 'We handle technical issues.'", answer: "We don't handle technical issues." }
+    ],
+    quiz: [
+      { question: "Chọn đáp án đúng: My team ___ renewals every quarter.", answer: "handles", options: ["handle", "handles", "handling"] },
+      { question: "Chọn đáp án đúng: ___ you usually work late?", answer: "Do", options: ["Do", "Does", "Are"] },
+      { question: "Câu nào đúng?", answer: "She doesn't check emails on weekends.", options: ["She don't checks emails on weekends.", "She doesn't check emails on weekends.", "She not check emails on weekends."] },
+      { question: "Điền: He ___ (go) to the office every day.", answer: "goes" },
+      { question: "Dịch: 'Họ không xử lý hỗ trợ kỹ thuật.'", answer: "They don't handle technical support.", type: "translate" }
+    ]
+  },
+
+  // ---------------- DAY 3 ----------------
+  {
+    day: 3,
+    title: "Thì hiện tại tiếp diễn (Present Continuous)",
+    titleEn: "Present Continuous Tense",
+    level: "A1-A2",
+    explanation: {
+      summary: "Diễn tả hành động đang xảy ra ngay lúc nói, hoặc kế hoạch đã sắp xếp trong tương lai gần. Rất hữu ích khi báo cáo công việc đang làm ('I'm working on...').",
+      points: [
+        { rule: "S + am/is/are + V-ing", example: "I'm preparing the quarterly report now. (Tôi đang chuẩn bị báo cáo quý.)" },
+        { rule: "Phủ định: am/is/are + not + V-ing", example: "She isn't joining the call today. (Cô ấy không tham gia cuộc gọi hôm nay.)" },
+        { rule: "Câu hỏi: Am/Is/Are + S + V-ing?", example: "Are you working on the proposal? (Bạn đang làm bản đề xuất phải không?)" },
+        { rule: "Dùng cho kế hoạch tương lai gần đã xác nhận", example: "We are meeting the client at 3 PM tomorrow." },
+        { rule: "Quy tắc thêm -ing: bỏ e câm; nhân đôi phụ âm cuối nếu trọng âm rơi vào âm cuối", example: "make→making, run→running, stop→stopping" },
+        { rule: "Không dùng tiếp diễn với động từ trạng thái: know, like, want, believe, need", example: "❌ I am knowing → ✅ I know" }
+      ],
+      commonMistakes: [
+        "❌ I am work now. → ✅ I am working now.",
+        "❌ She is liking this plan. → ✅ She likes this plan.",
+        "❌ Are you working? Yes, I working. → ✅ Yes, I am working."
+      ]
+    },
+    dialogue: {
+      title: "Cập nhật tiến độ công việc",
+      lines: [
+        { speaker: "Manager", en: "What are you working on right now?", vi: "Bạn đang làm gì vậy?" },
+        { speaker: "Linh", en: "I'm preparing the renewal proposal for the Singapore client.", vi: "Tôi đang chuẩn bị đề xuất gia hạn cho khách hàng Singapore." },
+        { speaker: "Manager", en: "Good. Is the legal team reviewing the contract too?", vi: "Tốt. Đội pháp lý cũng đang xem xét hợp đồng phải không?" },
+        { speaker: "Linh", en: "Yes, they're reviewing it this week. We're meeting them on Thursday.", vi: "Đúng vậy, họ đang xem xét trong tuần này. Chúng tôi sẽ gặp họ vào thứ Năm." }
+      ]
+    },
+    passage: {
+      title: "Status Update",
+      text: "Right now, I am working on three renewal cases. Two clients are negotiating the price, so I am communicating with the sales team to find a solution. My colleague is preparing the documentation, while I am following up with the legal department. We are not facing any major issues at the moment, but the deadline is approaching quickly."
+    },
+    exercises: [
+      { type: "fill-blank", question: "I ___ (prepare) the report now.", answer: "am preparing" },
+      { type: "fill-blank", question: "They ___ (not/join) the call today.", answer: "aren't joining" },
+      { type: "fill-blank", question: "___ she ___ (review) the contract?", answer: "Is she reviewing" },
+      { type: "multiple-choice", question: "Chọn câu đúng:", answer: "We are meeting the client at 3 PM.", options: ["We meeting the client at 3 PM.", "We are meeting the client at 3 PM.", "We are meet the client at 3 PM."] },
+      { type: "translate", question: "Dịch: 'Tôi đang theo dõi tiến độ hợp đồng.'", answer: "I am following up on the contract." },
+      { type: "error-correction", question: "Sửa lỗi: 'She is knowing the answer.'", answer: "She knows the answer." }
+    ],
+    quiz: [
+      { question: "Điền: Right now, the team ___ (work) on the proposal.", answer: "is working" },
+      { question: "Chọn câu đúng:", answer: "Are you joining the meeting?", options: ["Are you join the meeting?", "Are you joining the meeting?", "Do you joining the meeting?"] },
+      { question: "Câu nào SAI?", answer: "I am wanting this deal.", options: ["I am preparing the report.", "I am wanting this deal.", "She is reviewing the contract."] },
+      { question: "Dịch: 'Họ đang đàm phán giá.'", answer: "They are negotiating the price.", type: "translate" }
+    ]
+  },
+
+  // ---------------- DAY 4 ----------------
+  {
+    day: 4,
+    title: "Danh từ số nhiều & Đếm được/Không đếm được",
+    titleEn: "Plural Nouns & Countable/Uncountable",
+    level: "A1-A2",
+    explanation: {
+      summary: "Phân biệt danh từ đếm được (có số nhiều) và không đếm được (luôn ở dạng số ít) là nền tảng để dùng đúng a/an, many/much, số lượng.",
+      points: [
+        { rule: "Đếm được: thêm -s/-es để thành số nhiều", example: "contract→contracts, client→clients, box→boxes" },
+        { rule: "Danh từ bất quy tắc", example: "person→people, child→children, man→men, woman→women" },
+        { rule: "Không đếm được: KHÔNG thêm -s, dùng động từ số ít", example: "information, advice, equipment, software, feedback" },
+        { rule: "Dùng a/an chỉ với danh từ đếm được số ít", example: "a contract, an email (KHÔNG: an information)" },
+        { rule: "Để đếm danh từ không đếm được, dùng đơn vị đo", example: "a piece of advice, a list of equipment, a sheet of paper" }
+      ],
+      commonMistakes: [
+        "❌ informations, advices, equipments → ✅ information, advice, equipment (không có -s)",
+        "❌ a software → ✅ a piece of software / some software",
+        "❌ many information → ✅ much information"
+      ]
+    },
+    dialogue: {
+      title: "Trao đổi tài liệu",
+      lines: [
+        { speaker: "Anna", en: "Can you send me some information about the new clients?", vi: "Bạn gửi cho tôi vài thông tin về khách hàng mới được không?" },
+        { speaker: "Minh", en: "Sure. I have two contracts and three reports ready.", vi: "Được. Tôi có sẵn hai hợp đồng và ba báo cáo." },
+        { speaker: "Anna", en: "Great, and do you have any feedback from the equipment team?", vi: "Tốt, bạn có phản hồi nào từ đội thiết bị không?" },
+        { speaker: "Minh", en: "Yes, one piece of advice: double-check the battery specifications.", vi: "Có, một lời khuyên: kiểm tra kỹ thông số pin." }
+      ]
+    },
+    passage: {
+      text: "Our company manufactures UAVs and distributes American software. We work with many clients across different countries. Each project requires several pieces of equipment, technical documents, and detailed information about composite materials. Last month, we signed five new contracts and received positive feedback from three partners."
+    },
+    exercises: [
+      { type: "fill-blank", question: "We have three ___ (contract) to review.", answer: "contracts" },
+      { type: "fill-blank", question: "I need some ___ (information) about the client.", answer: "information", hint: "không thêm -s" },
+      { type: "multiple-choice", question: "Chọn đúng:", answer: "much information", options: ["many information", "much information", "a information"] },
+      { type: "multiple-choice", question: "Số nhiều của 'person' là gì?", answer: "people", options: ["persons", "people", "peoples"] },
+      { type: "translate", question: "Dịch: 'Chúng tôi cần thêm thiết bị.'", answer: "We need more equipment." },
+      { type: "error-correction", question: "Sửa lỗi: 'I have many advices for you.'", answer: "I have a lot of advice for you." }
+    ],
+    quiz: [
+      { question: "Chọn đúng: We received positive ___ from clients.", answer: "feedback", options: ["feedbacks", "feedback", "a feedback"] },
+      { question: "Số nhiều của 'child' là?", answer: "children", options: ["childs", "children", "childrens"] },
+      { question: "Câu nào đúng?", answer: "She gave me a piece of advice.", options: ["She gave me an advice.", "She gave me a piece of advice.", "She gave me advices."] },
+      { question: "Dịch: 'Tôi có ba báo cáo.'", answer: "I have three reports.", type: "translate" }
+    ]
+  },
+
+  // ---------------- DAY 5 (REVIEW + QUICK QUIZ) ----------------
+  {
+    day: 5,
+    title: "Ôn tập tuần 1 (Phần 1) + Quiz nhanh",
+    titleEn: "Review: Days 1-4 + Quick Quiz",
+    level: "A1-A2",
+    isReview: true,
+    explanation: {
+      summary: "Hôm nay ôn lại 4 điểm ngữ pháp: TO BE, hiện tại đơn, hiện tại tiếp diễn, danh từ đếm được/không đếm được. Mục tiêu: phân biệt được khi nào dùng thì nào, và dùng đúng danh từ số nhiều.",
+      points: [
+        { rule: "TO BE vs hiện tại đơn (V thường)", example: "I am a manager. (trạng thái) vs I work every day. (thói quen)" },
+        { rule: "Hiện tại đơn vs hiện tại tiếp diễn", example: "I usually work at 8 AM. (thói quen) vs I am working right now. (đang diễn ra)" },
+        { rule: "Đếm được vs không đếm được khi dùng many/much", example: "many contracts vs much information" }
+      ],
+      commonMistakes: []
+    },
+    dialogue: {
+      title: "Tổng hợp 4 chủ điểm",
+      lines: [
+        { speaker: "Anna", en: "Are you free now? I'm preparing a report and I need some information.", vi: "Bạn rảnh không? Tôi đang chuẩn bị báo cáo và cần vài thông tin." },
+        { speaker: "Minh", en: "I'm a bit busy, but I usually finish by 5 PM. I have three contracts to check.", vi: "Tôi hơi bận, nhưng thường xong lúc 5 giờ. Tôi có ba hợp đồng cần kiểm tra." },
+        { speaker: "Anna", en: "No problem. Does your team handle the documentation too?", vi: "Không sao. Đội bạn có xử lý cả hồ sơ tài liệu không?" },
+        { speaker: "Minh", en: "Yes, we do. We're updating the templates this week.", vi: "Có, chúng tôi cập nhật mẫu trong tuần này." }
+      ]
+    },
+    passage: {
+      text: "I am a Customer Success Manager. I usually start work at 8 AM and check my emails first. Right now, I am preparing a renewal report for an important client. My team handles many contracts every month, and we always need accurate information from the sales department. Today, we are also reviewing some new equipment documents."
+    },
+    exercises: [
+      { type: "fill-blank", question: "I ___ (be) a manager, and I ___ (work) every day.", answer: "am / work" },
+      { type: "fill-blank", question: "She ___ (prepare) the report right now.", answer: "is preparing" },
+      { type: "fill-blank", question: "We need ___ (much/many) information.", answer: "much" },
+      { type: "fill-blank", question: "They have five ___ (contract) to sign.", answer: "contracts" },
+      { type: "translate", question: "Dịch: 'Tôi đang bận, nhưng tôi thường rảnh vào buổi chiều.'", answer: "I am busy, but I am usually free in the afternoon." }
+    ],
+    quiz: [
+      { question: "Chọn đúng: She ___ a CSM and she ___ five clients.", answer: "is / handles", options: ["is / handles", "am / handle", "are / handles"] },
+      { question: "Chọn đúng: Right now, we ___ (negotiate) the contract.", answer: "are negotiating", options: ["negotiate", "are negotiating", "negotiates"] },
+      { question: "Câu nào đúng?", answer: "We don't have much information yet.", options: ["We don't have much informations yet.", "We don't have much information yet.", "We doesn't have much information yet."] },
+      { question: "Điền: There ___ three ___ (contract) on my desk.", answer: "are / contracts" },
+      { question: "Dịch: 'Cô ấy đang xem lại ba báo cáo ngay bây giờ.'", answer: "She is reviewing three reports right now.", type: "translate" }
+    ],
+    isQuickQuizDay: true
+  },
+  // ---------------- DAY 6 ----------------
+  {
+    day: 6,
+    title: "Mạo từ A/AN/THE",
+    titleEn: "Articles A/AN/THE",
+    level: "A2",
+    explanation: {
+      summary: "Mạo từ là từ nhỏ nhưng dùng sai rất dễ làm câu nghe không tự nhiên. A/an dùng cho danh từ đếm được số ít chưa xác định; THE dùng khi cả người nói và người nghe đều biết rõ vật/người đó là gì.",
+      points: [
+        { rule: "A + danh từ bắt đầu phụ âm (âm đọc)", example: "a client, a report, a university (đọc là /juː/ - âm phụ âm)" },
+        { rule: "AN + danh từ bắt đầu nguyên âm (âm đọc)", example: "an email, an hour (h câm), an MBA" },
+        { rule: "THE khi đã nhắc đến trước đó, hoặc chỉ vật duy nhất", example: "I have a contract. The contract expires in May. (đã nhắc ở câu trước)" },
+        { rule: "THE với vật/khái niệm duy nhất, rõ ràng", example: "the internet, the sun, the CEO of our company" },
+        { rule: "KHÔNG dùng mạo từ với danh từ số nhiều/không đếm được khi nói chung chung", example: "Contracts are important. (nói chung, không phải hợp đồng cụ thể)" }
+      ],
+      commonMistakes: [
+        "❌ a hour → ✅ an hour (h câm)",
+        "❌ I sent the email yesterday (lần đầu nhắc đến) → ✅ I sent an email yesterday",
+        "❌ The information are important → ✅ The information is important"
+      ]
+    },
+    dialogue: {
+      lines: [
+        { speaker: "Tom", en: "I just signed a contract with a new client in Japan.", vi: "Tôi vừa ký một hợp đồng với một khách hàng mới ở Nhật." },
+        { speaker: "Linh", en: "Nice! Is the contract for the new UAV software?", vi: "Tuyệt! Hợp đồng đó cho phần mềm UAV mới phải không?" },
+        { speaker: "Tom", en: "Yes, exactly. I'll send you an email with the details.", vi: "Đúng vậy. Tôi sẽ gửi bạn một email với chi tiết." },
+        { speaker: "Linh", en: "Thanks. By the way, who is the CEO meeting next week?", vi: "Cảm ơn. Tiện thể, CEO sẽ gặp ai vào tuần sau?" }
+      ]
+    },
+    passage: {
+      text: "Yesterday, I received an email from a client in Singapore. The client wants to renew a contract for the next year. I checked the contract carefully and sent the details to the legal team. The CEO will review the final agreement next week. This is an important deal for our company."
+    },
+    exercises: [
+      { type: "fill-blank", question: "I received ___ email this morning. (a/an)", answer: "an" },
+      { type: "fill-blank", question: "She signed ___ contract yesterday. ___ contract expires in 2027.", answer: "a / The" },
+      { type: "multiple-choice", question: "Chọn đúng:", answer: "an hour", options: ["a hour", "an hour", "the hour"] },
+      { type: "fill-blank", question: "___ CEO of our company is visiting Vietnam.", answer: "The" },
+      { type: "translate", question: "Dịch: 'Tôi cần một bản hợp đồng mới.'", answer: "I need a new contract." }
+    ],
+    quiz: [
+      { question: "Chọn đúng: I have ___ MBA degree.", answer: "an", options: ["a", "an", "the"] },
+      { question: "Điền: She sent ___ report. ___ report has three pages.", answer: "a / The" },
+      { question: "Câu nào đúng?", answer: "The information is correct.", options: ["The informations are correct.", "The information is correct.", "An information is correct."] }
+    ]
+  },
+
+  // ---------------- DAY 7 ----------------
+  {
+    day: 7,
+    title: "Đại từ nhân xưng & Tính từ sở hữu",
+    titleEn: "Personal Pronouns & Possessive Adjectives",
+    level: "A1-A2",
+    explanation: {
+      summary: "Đại từ thay thế danh từ để tránh lặp lại; tính từ sở hữu chỉ quyền sở hữu, đứng trước danh từ.",
+      points: [
+        { rule: "Chủ ngữ: I, you, he, she, it, we, they", example: "She handles APJ accounts." },
+        { rule: "Tân ngữ: me, you, him, her, it, us, them", example: "Please send the report to me/him/them." },
+        { rule: "Tính từ sở hữu: my, your, his, her, its, our, their", example: "This is my report. Their team is efficient." },
+        { rule: "Đại từ sở hữu (đứng độc lập): mine, yours, his, hers, ours, theirs", example: "This laptop is mine." },
+        { rule: "Sở hữu cách 's với người/tên riêng", example: "Anna's client, the manager's decision" }
+      ],
+      commonMistakes: [
+        "❌ Send to she. → ✅ Send to her.",
+        "❌ This is her's report. → ✅ This is her report. (her không có 's khi đứng trước danh từ)",
+        "❌ Its a good deal. → ✅ It's a good deal. (it's = it is, khác its sở hữu)"
+      ]
+    },
+    dialogue: {
+      lines: [
+        { speaker: "Anna", en: "Is this report yours or his?", vi: "Báo cáo này của bạn hay của anh ấy?" },
+        { speaker: "Minh", en: "It's mine. His report is on the shared drive.", vi: "Của tôi đấy. Báo cáo của anh ấy ở trên ổ đĩa chung." },
+        { speaker: "Anna", en: "Great, can you send it to me and to them?", vi: "Tốt, bạn gửi nó cho tôi và họ được không?" },
+        { speaker: "Minh", en: "Sure. Their deadline is tomorrow, so I'll send it now.", vi: "Được. Hạn của họ là ngày mai, nên tôi sẽ gửi ngay." }
+      ]
+    },
+    passage: {
+      text: "Anna is my colleague. Her team handles renewals in APJ, and our team handles UAV contracts. Sometimes we share clients, so we send them updates together. Yesterday, she asked me to review her report. I checked it and sent my feedback to her. Their deadline was tight, but we finished it on time."
+    },
+    exercises: [
+      { type: "fill-blank", question: "This is ___ (my/me) laptop.", answer: "my" },
+      { type: "fill-blank", question: "Please send the file to ___ (he/him).", answer: "him" },
+      { type: "fill-blank", question: "___ (Her/She) report is excellent.", answer: "Her" },
+      { type: "multiple-choice", question: "Chọn đúng:", answer: "It's a good deal.", options: ["Its a good deal.", "It's a good deal.", "Its' a good deal."] },
+      { type: "translate", question: "Dịch: 'Đây là hợp đồng của anh ấy.'", answer: "This is his contract." }
+    ],
+    quiz: [
+      { question: "Chọn đúng: This laptop is ___.", answer: "mine", options: ["my", "mine", "me"] },
+      { question: "Điền: ___ team finished ___ report early.", answer: "Our / their" },
+      { question: "Câu nào đúng?", answer: "Anna's client is from Japan.", options: ["Anna' client is from Japan.", "Anna's client is from Japan.", "Annas client is from Japan."] }
+    ]
+  },
+
+  // ---------------- DAY 8 ----------------
+  {
+    day: 8,
+    title: "THERE IS / THERE ARE",
+    titleEn: "There is / There are",
+    level: "A1-A2",
+    explanation: {
+      summary: "Dùng để nói về sự tồn tại của vật/người tại một nơi/thời điểm. Rất phổ biến khi mô tả tình huống, báo cáo số liệu.",
+      points: [
+        { rule: "There is + danh từ số ít/không đếm được", example: "There is a new policy for renewals." },
+        { rule: "There are + danh từ số nhiều", example: "There are five contracts pending." },
+        { rule: "Phủ định: There isn't / There aren't", example: "There isn't enough information yet." },
+        { rule: "Câu hỏi: Is there...? / Are there...?", example: "Are there any issues with the contract?" },
+        { rule: "Thường đi với some/any/no + danh từ", example: "There are some delays. There is no problem." }
+      ],
+      commonMistakes: [
+        "❌ There is three reports. → ✅ There are three reports.",
+        "❌ It has many clients. (sai văn phong khi nói tồn tại) → ✅ There are many clients.",
+        "❌ There is some information are missing. → ✅ There is some information missing."
+      ]
+    },
+    dialogue: {
+      lines: [
+        { speaker: "Manager", en: "Are there any issues with the renewal?", vi: "Có vấn đề gì với việc gia hạn không?" },
+        { speaker: "Linh", en: "There's a small delay because the client needs more time.", vi: "Có một chút chậm trễ vì khách hàng cần thêm thời gian." },
+        { speaker: "Manager", en: "I see. Is there anything we can do to help?", vi: "Tôi hiểu. Có gì chúng ta có thể giúp không?" },
+        { speaker: "Linh", en: "There are two options: extend the deadline or offer a discount.", vi: "Có hai lựa chọn: gia hạn thời hạn hoặc đề nghị giảm giá." }
+      ]
+    },
+    passage: {
+      text: "There are currently ten active contracts in our pipeline. There is one urgent case that needs attention this week. There aren't any major problems, but there is some uncertainty about the budget. There are also three new leads from the marketing team that we need to follow up on."
+    },
+    exercises: [
+      { type: "fill-blank", question: "There ___ (be) five clients waiting.", answer: "are" },
+      { type: "fill-blank", question: "There ___ (be) no problem with the contract.", answer: "is" },
+      { type: "multiple-choice", question: "Chọn đúng:", answer: "Are there any delays?", options: ["Is there any delays?", "Are there any delays?", "There are any delays?"] },
+      { type: "translate", question: "Dịch: 'Có ba báo cáo cần xem lại.'", answer: "There are three reports to review." }
+    ],
+    quiz: [
+      { question: "Chọn đúng: There ___ enough time to finish.", answer: "isn't", options: ["isn't", "aren't", "don't"] },
+      { question: "Điền: ___ there any updates on the deal?", answer: "Are" },
+      { question: "Câu nào đúng?", answer: "There are two options available.", options: ["There is two options available.", "There are two options available.", "There two options available."] }
+    ]
+  },
+
+  // ---------------- DAY 9 ----------------
+  {
+    day: 9,
+    title: "Giới từ chỉ thời gian & nơi chốn (IN/ON/AT)",
+    titleEn: "Prepositions of Time & Place",
+    level: "A1-A2",
+    explanation: {
+      summary: "IN/ON/AT là 3 giới từ cơ bản nhất, dùng sai sẽ khiến câu nghe rất 'không bản xứ'. Ghi nhớ theo nhóm: lớn→nhỏ cho thời gian, và bao quát→cụ thể cho nơi chốn.",
+      points: [
+        { rule: "IN: tháng, năm, mùa, buổi (trừ at night)", example: "in May, in 2026, in the morning" },
+        { rule: "ON: ngày, thứ, ngày cụ thể", example: "on Monday, on May 5th, on the weekend" },
+        { rule: "AT: giờ cụ thể, một số cụm cố định", example: "at 3 PM, at noon, at night" },
+        { rule: "IN (nơi chốn): không gian lớn, bên trong", example: "in Vietnam, in the office, in the meeting room" },
+        { rule: "ON: bề mặt, đường, tầng", example: "on the table, on the 5th floor, on Nguyen Hue street" },
+        { rule: "AT: địa điểm cụ thể, sự kiện", example: "at the airport, at the conference, at work" }
+      ],
+      commonMistakes: [
+        "❌ at Monday → ✅ on Monday",
+        "❌ in 3 PM → ✅ at 3 PM",
+        "❌ at the morning → ✅ in the morning"
+      ]
+    },
+    dialogue: {
+      lines: [
+        { speaker: "Anna", en: "Is the call at 3 PM or in the afternoon generally?", vi: "Cuộc gọi vào lúc 3 giờ chiều hay buổi chiều nói chung?" },
+        { speaker: "Minh", en: "It's at 3 PM, on Thursday, in the main meeting room.", vi: "Lúc 3 giờ chiều, thứ Năm, ở phòng họp chính." },
+        { speaker: "Anna", en: "Got it. And the conference is in Singapore, right?", vi: "Rõ rồi. Và hội nghị diễn ra ở Singapore phải không?" },
+        { speaker: "Minh", en: "Yes, at the Marina Bay convention center, in October.", vi: "Đúng, tại trung tâm hội nghị Marina Bay, vào tháng Mười." }
+      ]
+    },
+    passage: {
+      text: "We have an important meeting on Thursday at 3 PM in the main office. In the morning, I usually prepare my notes at my desk. The client is currently in Tokyo, but they will be at the conference in Singapore next month. I need to send the documents on time, before the deadline at noon."
+    },
+    exercises: [
+      { type: "fill-blank", question: "The meeting is ___ Monday ___ 3 PM.", answer: "on / at" },
+      { type: "fill-blank", question: "I work ___ the office ___ the morning.", answer: "in / in" },
+      { type: "fill-blank", question: "She lives ___ Vietnam, ___ Hanoi.", answer: "in / in" },
+      { type: "translate", question: "Dịch: 'Cuộc họp vào thứ Sáu lúc 9 giờ sáng.'", answer: "The meeting is on Friday at 9 AM." }
+    ],
+    quiz: [
+      { question: "Chọn đúng: I'll see you ___ the conference.", answer: "at", options: ["in", "on", "at"] },
+      { question: "Điền: The report is due ___ May 5th.", answer: "on" },
+      { question: "Câu nào đúng?", answer: "We meet on Mondays at 9 AM.", options: ["We meet at Mondays in 9 AM.", "We meet on Mondays at 9 AM.", "We meet in Mondays on 9 AM."] }
+    ]
+  },
+
+  // ---------------- DAY 10 (REVIEW + UNIT TEST) ----------------
+  {
+    day: 10,
+    title: "Ôn tập tuần 1 (Phần 2) + Bài test tổng hợp",
+    titleEn: "Review: Days 6-9 + Comprehensive Test",
+    level: "A1-A2",
+    isReview: true,
+    isUnitTestDay: true,
+    explanation: {
+      summary: "Ôn tập: mạo từ A/AN/THE, đại từ & tính từ sở hữu, there is/are, giới từ in/on/at. Hôm nay có bài test tổng hợp 10 ngày đầu — đánh giá toàn diện trước khi sang tuần 2 (thì quá khứ).",
+      points: [
+        { rule: "Kết hợp mạo từ + there is/are", example: "There is a contract on my desk. The contract is from a client in Japan." },
+        { rule: "Kết hợp giới từ + sở hữu", example: "Our meeting is on Monday at 9 AM, in her office." }
+      ],
+      commonMistakes: []
+    },
+    dialogue: {
+      lines: [
+        { speaker: "Anna", en: "There's a contract on my desk. Is it yours?", vi: "Có một hợp đồng trên bàn tôi. Của bạn à?" },
+        { speaker: "Minh", en: "No, it's hers. Her meeting with the client is on Friday at 10 AM.", vi: "Không, của cô ấy. Cuộc họp của cô ấy với khách hàng vào thứ Sáu lúc 10 giờ." },
+        { speaker: "Anna", en: "I see. Are there any other documents I should check?", vi: "Tôi hiểu. Có tài liệu nào khác tôi nên kiểm tra không?" },
+        { speaker: "Minh", en: "Yes, there are two reports in the shared folder.", vi: "Có, có hai báo cáo trong thư mục chung." }
+      ]
+    },
+    passage: {
+      text: "There is an important contract on my desk today. It's from a client in Japan, and the deadline is on Friday at 5 PM. My manager's review is scheduled in the afternoon, in the main meeting room. There are also two other reports that need her approval. I'll send an email to confirm everything before the meeting."
+    },
+    exercises: [
+      { type: "fill-blank", question: "There ___ (be) ___ (a/an) email from a new client.", answer: "is / an" },
+      { type: "fill-blank", question: "___ report is ___ (my/mine). It's on ___ desk.", answer: "Her / hers / my" },
+      { type: "fill-blank", question: "The meeting is ___ Friday ___ 9 AM ___ the main office.", answer: "on / at / in" },
+      { type: "translate", question: "Dịch: 'Có hai khách hàng đang chờ ở văn phòng lúc 2 giờ chiều.'", answer: "There are two clients waiting at the office at 2 PM." }
+    ],
+    quiz: [],
+    unitTest: {
+      title: "Bài kiểm tra tổng hợp: Ngày 1-10",
+      description: "20 câu hỏi tổng hợp tất cả điểm ngữ pháp đã học trong 10 ngày: to be, hiện tại đơn, hiện tại tiếp diễn, danh từ, mạo từ, đại từ, there is/are, giới từ.",
+      questions: [
+        { question: "She ___ a CSM and she ___ many clients.", answer: "is / has", options: ["is / has", "are / have", "am / has"] },
+        { question: "Right now, I ___ (prepare) a report.", answer: "am preparing" },
+        { question: "We need much ___ (information/informations) before deciding.", answer: "information" },
+        { question: "I received ___ email this morning.", answer: "an", options: ["a", "an", "the"] },
+        { question: "This laptop is ___, not ___.", answer: "mine / his" },
+        { question: "There ___ three contracts pending.", answer: "are", options: ["is", "are", "be"] },
+        { question: "The meeting is ___ Monday ___ 9 AM.", answer: "on / at" },
+        { question: "Chọn câu đúng:", answer: "She doesn't work on Sundays.", options: ["She don't works on Sundays.", "She doesn't work on Sundays.", "She not works on Sundays."] },
+        { question: "Chọn câu đúng:", answer: "There are five reports on the table.", options: ["There is five reports on the table.", "There are five reports on the table.", "There five reports on the table."] },
+        { question: "Dịch: 'Tôi đang làm việc với ba hợp đồng ngay bây giờ.'", answer: "I am working on three contracts right now.", type: "translate" },
+        { question: "Dịch: 'Cô ấy là quản lý của tôi.'", answer: "She is my manager.", type: "translate" },
+        { question: "Dịch: 'Có vài thông tin còn thiếu.'", answer: "There is some information missing.", type: "translate" },
+        { question: "Sửa lỗi: 'He don't have many informations.'", answer: "He doesn't have much information.", type: "error-correction" },
+        { question: "Sửa lỗi: 'Its a important deal for we.'", answer: "It's an important deal for us.", type: "error-correction" },
+        { question: "Sửa lỗi: 'There is three meeting at Monday.'", answer: "There are three meetings on Monday.", type: "error-correction" },
+        { question: "Điền giới từ đúng: I work ___ the office ___ Mondays.", answer: "in / on" },
+        { question: "Điền: My manager ___ (review) ___ (my/mine) report ___ Friday.", answer: "reviews / my / on" },
+        { question: "Chọn đúng: ___ you free ___ 3 PM?", answer: "Are / at", options: ["Are / at", "Is / in", "Do / on"] },
+        { question: "Chọn đúng: We ___ (not/have) enough ___ (equipment/equipments).", answer: "don't have / equipment" },
+        { question: "Viết một câu hoàn chỉnh mô tả công việc của bạn dùng ít nhất 2 thì đã học (to be + hiện tại đơn hoặc tiếp diễn).", answer: "Tự do (free response)", type: "free-response" }
+      ]
+    }
+  }
+];
+
+
+
+
+// ============================================================
+// STATE
+// ============================================================
+const State = {
+  userId: null,
+  userName: null,
+  progress: {
+    completedDays: {},     // { "1": {completedAt, exerciseScore, quizScore, skipped} }
+    srsCards: {},          // { "day-1": {box, dueDate, lastReview} }
+    streak: 0,
+    lastActiveDate: null,
+    testResults: {}        // { "10": {score, total, date} }
+  },
+  currentDay: 1,
+  speechVoices: []
+};
+
+const LS_KEY = "eng100_progress_v1";
+const LS_USER_KEY = "eng100_user_v1";
+
+// SafeStorage: localStorage không khả dụng khi mở file HTML trực tiếp qua
+// file:// (origin "opaque") — mọi lệnh gọi sẽ ném lỗi và làm dừng cả app.
+// Wrapper này tự động chuyển sang lưu tạm trong bộ nhớ (mất khi đóng tab)
+// nếu localStorage bị chặn, để app luôn chạy được dù không lưu lại được.
+const SafeStorage = (function () {
+  let memoryFallback = {};
+  let usingMemory = false;
+  try {
+    const testKey = "__eng100_test__";
+    window.localStorage.setItem(testKey, "1");
+    window.localStorage.removeItem(testKey);
+  } catch (e) {
+    usingMemory = true;
+    console.warn("localStorage không khả dụng (có thể đang mở qua file://). Dùng bộ nhớ tạm — tiến độ sẽ KHÔNG được lưu lại khi đóng trang. Hãy mở app qua một địa chỉ web (vd: GitHub Pages) để lưu tiến độ vĩnh viễn.");
+  }
+  return {
+    isMemoryOnly: () => usingMemory,
+    getItem(key) {
+      if (usingMemory) return memoryFallback[key] ?? null;
+      try { return window.localStorage.getItem(key); }
+      catch (e) { usingMemory = true; return memoryFallback[key] ?? null; }
+    },
+    setItem(key, value) {
+      if (usingMemory) { memoryFallback[key] = value; return; }
+      try { window.localStorage.setItem(key, value); }
+      catch (e) { usingMemory = true; memoryFallback[key] = value; }
+    }
+  };
+})();
+
+function todayStr(d = new Date()) {
+  return d.toISOString().slice(0, 10);
+}
+function daysBetween(a, b) {
+  return Math.round((new Date(b) - new Date(a)) / 86400000);
+}
+
+// ---------- Local persistence (fallback + instant UX) ----------
+function saveLocal() {
+  SafeStorage.setItem(LS_KEY, JSON.stringify(State.progress));
+}
+function loadLocal() {
+  try {
+    const raw = SafeStorage.getItem(LS_KEY);
+    if (raw) State.progress = { ...State.progress, ...JSON.parse(raw) };
+  } catch (e) { console.warn(e); }
+}
+
+// ---------- Firebase sync ----------
+function userRef() {
+  return ref(db, `users/${State.userId}/progress`);
+}
+
+async function pushToFirebase() {
+  if (!firebaseReady || !State.userId) { saveLocal(); return; }
+  try {
+    await set(userRef(), State.progress);
+    saveLocal();
+  } catch (e) {
+    console.warn("Firebase write failed, saved locally only.", e);
+    saveLocal();
+  }
+}
+
+async function pullFromFirebase() {
+  if (!firebaseReady || !State.userId) return false;
+  try {
+    const snap = await get(userRef());
+    if (snap.exists()) {
+      const remote = snap.val();
+      State.progress = {
+        completedDays: remote.completedDays || {},
+        srsCards: remote.srsCards || {},
+        streak: remote.streak || 0,
+        lastActiveDate: remote.lastActiveDate || null,
+        testResults: remote.testResults || {}
+      };
+      return true;
+    }
+  } catch (e) {
+    console.warn("Firebase read failed, using local data.", e);
+  }
+  return false;
+}
+
+function listenFirebaseLive() {
+  if (!firebaseReady || !State.userId) return;
+  onValue(userRef(), (snap) => {
+    if (snap.exists()) {
+      const remote = snap.val();
+      State.progress = {
+        completedDays: remote.completedDays || {},
+        srsCards: remote.srsCards || {},
+        streak: remote.streak || 0,
+        lastActiveDate: remote.lastActiveDate || null,
+        testResults: remote.testResults || {}
+      };
+      renderAll();
+    }
+  });
+}
+
+// ============================================================
+// STREAK LOGIC
+// ============================================================
+function touchStreak() {
+  const today = todayStr();
+  const last = State.progress.lastActiveDate;
+  if (last === today) return; // already counted today
+  if (!last) {
+    State.progress.streak = 1;
+  } else {
+    const gap = daysBetween(last, today);
+    if (gap === 1) State.progress.streak += 1;
+    else if (gap > 1) State.progress.streak = 1;
+  }
+  State.progress.lastActiveDate = today;
+}
+
+// ============================================================
+// SRS LOGIC (Leitner-style, 5 boxes)
+// Box 1 → review after 1 day
+// Box 2 → 3 days
+// Box 3 → 7 days
+// Box 4 → 14 days
+// Box 5 → 30 days (mastered, rarely shown)
+// ============================================================
+const SRS_INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
+
+function addToSRS(dayNum) {
+  const key = `day-${dayNum}`;
+  if (State.progress.srsCards[key]) return; // already tracked
+  const due = new Date();
+  due.setDate(due.getDate() + SRS_INTERVALS[1]);
+  State.progress.srsCards[key] = {
+    box: 1,
+    dueDate: todayStr(due),
+    lastReview: todayStr()
+  };
+}
+
+function reviewSRSCard(dayNum, wasCorrect) {
+  const key = `day-${dayNum}`;
+  const card = State.progress.srsCards[key];
+  if (!card) return;
+  let newBox = wasCorrect ? Math.min(card.box + 1, 5) : 1;
+  const due = new Date();
+  due.setDate(due.getDate() + SRS_INTERVALS[newBox]);
+  card.box = newBox;
+  card.dueDate = todayStr(due);
+  card.lastReview = todayStr();
+  pushToFirebase();
+}
+
+function getDueSRSCards() {
+  const today = todayStr();
+  return Object.entries(State.progress.srsCards)
+    .filter(([k, v]) => v.dueDate <= today)
+    .map(([k, v]) => ({ dayNum: parseInt(k.replace("day-", "")), ...v }));
+}
+
+// ============================================================
+// SPEECH (Web Speech API)
+// ============================================================
+function loadVoices() {
+  State.speechVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+}
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const enVoice = State.speechVoices.find(v => /en-US|en_US/.test(v.lang)) ||
+                   State.speechVoices.find(v => v.lang.startsWith("en"));
+  if (enVoice) u.voice = enVoice;
+  u.lang = "en-US";
+  u.rate = 0.92;
+  window.speechSynthesis.speak(u);
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function getLessonByDay(d) {
+  return (typeof ALL_LESSONS !== "undefined" ? ALL_LESSONS : []).find(l => l.day === d);
+}
+function isDayCompleted(d) {
+  return !!State.progress.completedDays[d];
+}
+function getNextUnlockedDay() {
+  const totalLessons = (typeof ALL_LESSONS !== "undefined" ? ALL_LESSONS.length : 0);
+  for (let d = 1; d <= totalLessons; d++) {
+    if (!isDayCompleted(d)) return d;
+  }
+  return totalLessons || 1;
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+function normalize(s) {
+  return String(s).toLowerCase().trim().replace(/\s+/g, " ").replace(/[.,!?]/g, "");
+}
+
+// ============================================================
+// RENDER: Day rail + progress
+// ============================================================
+function renderHero() {
+  const doneCount = Object.keys(State.progress.completedDays).length;
+  const pct = Math.round((doneCount / 100) * 100);
+  document.getElementById("currentDayNum").textContent = State.currentDay;
+  document.getElementById("progressFill").style.width = pct + "%";
+  document.getElementById("progressPct").textContent = pct + "% hoàn thành";
+  document.getElementById("progressDoneCount").textContent = `${doneCount}/100 ngày`;
+  document.getElementById("streakCount").textContent = State.progress.streak || 0;
+
+  const lesson = getLessonByDay(State.currentDay);
+  document.getElementById("heroMeta").textContent = lesson
+    ? (lesson.isUnitTestDay ? "Hôm nay có bài kiểm tra tổng hợp" : lesson.title)
+    : "Nội dung đang được bổ sung";
+
+  const rail = document.getElementById("dayRail");
+  rail.innerHTML = "";
+  const unlockLimit = getNextUnlockedDay();
+  for (let d = 1; d <= 100; d++) {
+    const chip = document.createElement("div");
+    const lessonD = getLessonByDay(d);
+    const lessonExists = !!lessonD;
+    let cls = "day-chip";
+    if (isDayCompleted(d)) cls += " done";
+    else if (d === State.currentDay) cls += " today";
+    else if (d > unlockLimit || !lessonExists) cls += " locked";
+    if (lessonD && lessonD.isUnitTestDay) cls += " unit-test";
+    chip.className = cls;
+    chip.textContent = d;
+    if (lessonExists && (isDayCompleted(d) || d <= unlockLimit)) {
+      chip.onclick = () => { State.currentDay = d; renderAll(); window.scrollTo({top:0, behavior:"smooth"}); };
+    }
+    rail.appendChild(chip);
+  }
+}
+
+// ============================================================
+// RENDER: Due review banner on home
+// ============================================================
+function renderDueReviewBanner() {
+  const due = getDueSRSCards();
+  const el = document.getElementById("dueReviewBanner");
+  if (due.length === 0) { el.innerHTML = ""; return; }
+  el.innerHTML = `
+    <div class="skip-bar" style="border-color:var(--navy);background:rgba(29,53,87,.06);cursor:pointer;" id="goReviewBanner">
+      <span>🔄 Bạn có <b>${due.length}</b> điểm ngữ pháp cần ôn lại hôm nay</span>
+      <button class="btn btn-primary btn-sm">Ôn ngay</button>
+    </div>`;
+  document.getElementById("goReviewBanner").onclick = () => switchView("review");
+}
+
+// ============================================================
+// RENDER: Lesson content
+// ============================================================
+function renderLesson() {
+  const container = document.getElementById("lessonContainer");
+  const lesson = getLessonByDay(State.currentDay);
+  if (!lesson) {
+    container.innerHTML = `
+      <div class="card">
+        <div class="empty-state">
+          <div class="ti">🚧</div>
+          <div>Nội dung ngày ${State.currentDay} đang được biên soạn.<br>Hãy quay lại sau nhé!</div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const completed = isDayCompleted(lesson.day);
+  let html = `<div class="card card-today">`;
+  html += `<div class="lesson-eyebrow">${lesson.isUnitTestDay ? "Kiểm tra tổng hợp" : (lesson.isReview ? "Ôn tập" : "Bài học mới")} · Ngày ${lesson.day}</div>`;
+  html += `<div class="lesson-title">${escapeHtml(lesson.title)}</div>`;
+  html += `<div class="lesson-title-en">${escapeHtml(lesson.titleEn || "")}</div>`;
+  html += `<span class="level-tag">Trình độ ${lesson.level}</span>`;
+
+  html += `<div class="section-label"><span class="num">1</span>Giải thích ngữ pháp</div>`;
+  html += `<div class="explain-summary">${escapeHtml(lesson.explanation.summary)}</div>`;
+  html += `<ul class="rule-list">`;
+  lesson.explanation.points.forEach(p => {
+    html += `<li class="rule-item"><div class="rule-text">${escapeHtml(p.rule)}</div><div class="rule-example">${escapeHtml(p.example)}</div></li>`;
+  });
+  html += `</ul>`;
+  if (lesson.explanation.commonMistakes && lesson.explanation.commonMistakes.length) {
+    html += `<div class="mistakes-box"><div class="mb-title">⚠️ Lỗi thường gặp</div><ul>`;
+    lesson.explanation.commonMistakes.forEach(m => html += `<li>${escapeHtml(m)}</li>`);
+    html += `</ul></div>`;
+  }
+
+  if (lesson.dialogue) {
+    html += `<div class="section-label"><span class="num">2</span>Hội thoại thực tế</div>`;
+    html += `<div class="dialogue-box">`;
+    lesson.dialogue.lines.forEach((line) => {
+      const initial = line.speaker[0];
+      html += `
+        <div class="dialogue-line">
+          <div class="dialogue-avatar">${escapeHtml(initial)}</div>
+          <div class="dialogue-bubble">
+            <div class="dialogue-speaker">${escapeHtml(line.speaker)}</div>
+            <div class="dialogue-en">${escapeHtml(line.en)}</div>
+            <div class="dialogue-vi">${escapeHtml(line.vi)}</div>
+          </div>
+          <button class="speak-btn" data-speak="${escapeHtml(line.en)}" title="Nghe phát âm">🔊</button>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (lesson.passage) {
+    html += `<div class="section-label"><span class="num">3</span>Đoạn văn ngắn</div>`;
+    html += `<div class="passage-box">
+      ${lesson.passage.title ? `<div class="ptitle">${escapeHtml(lesson.passage.title)}</div>` : ""}
+      ${escapeHtml(lesson.passage.text)}
+      <div style="margin-top:10px;"><button class="btn btn-ghost btn-sm" data-speak="${escapeHtml(lesson.passage.text)}">🔊 Nghe đoạn văn</button></div>
+    </div>`;
+  }
+
+  html += `<div class="section-label"><span class="num">4</span>Bài tập thực hành</div>`;
+  html += `<div id="exerciseArea">`;
+  lesson.exercises.forEach((ex, i) => html += renderExerciseItem(ex, i, "ex"));
+  html += `</div>`;
+  html += `<button class="btn btn-primary btn-block" id="checkExercisesBtn" style="margin-top:6px;">Kiểm tra đáp án bài tập</button>`;
+  html += `<div id="exerciseScoreMsg"></div>`;
+
+  if (!completed) {
+    html += `
+      <div class="skip-bar" id="skipBar" style="display:none;">
+        <span>⚡ Bạn làm rất tốt! Có thể bỏ qua phần luyện thêm và hoàn thành sớm.</span>
+        <button class="btn btn-gold btn-sm" id="skipToQuizBtn">Tăng tốc →</button>
+      </div>`;
+  }
+
+  if (lesson.isUnitTestDay && lesson.unitTest) {
+    html += `<div class="section-label"><span class="num">5</span>${escapeHtml(lesson.unitTest.title)}</div>`;
+    html += `<div class="explain-summary">${escapeHtml(lesson.unitTest.description)}</div>`;
+    html += `<div id="quizArea" style="display:none;">`;
+    lesson.unitTest.questions.forEach((q, i) => html += renderExerciseItem(q, i, "quiz"));
+    html += `</div>`;
+    html += `<button class="btn btn-ghost btn-block" id="startQuizBtn" style="margin-top:6px;">Bắt đầu bài kiểm tra tổng hợp</button>`;
+  } else if (lesson.quiz && lesson.quiz.length) {
+    html += `<div class="section-label"><span class="num">5</span>Bài kiểm tra ngắn ${lesson.isQuickQuizDay ? "(Quiz 5 ngày)" : ""}</div>`;
+    html += `<div id="quizArea" style="display:none;">`;
+    lesson.quiz.forEach((q, i) => html += renderExerciseItem(q, i, "quiz"));
+    html += `</div>`;
+    html += `<button class="btn btn-ghost btn-block" id="startQuizBtn" style="margin-top:6px;">Bắt đầu bài kiểm tra ngắn</button>`;
+  }
+
+  html += `<div id="quizScoreMsg"></div>`;
+
+  if (completed) {
+    html += `<div class="ex-feedback show ok" style="margin-top:16px;">✅ Bạn đã hoàn thành ngày ${lesson.day}. Điểm bài tập: ${State.progress.completedDays[lesson.day].exerciseScore || "—"}, Quiz: ${State.progress.completedDays[lesson.day].quizScore || "—"}</div>`;
+  }
+
+  html += `</div>`;
+
+  html += `<div class="lesson-nav">`;
+  html += `<button class="btn btn-ghost" id="prevDayBtn" ${State.currentDay<=1?"disabled":""}>← Ngày trước</button>`;
+  html += `<button class="btn btn-ghost" id="nextDayBtn" ${(!isDayCompleted(State.currentDay) || State.currentDay>=100)?"disabled":""}>Ngày tiếp →</button>`;
+  html += `</div>`;
+
+  container.innerHTML = html;
+  attachLessonHandlers(lesson);
+}
+
+function renderExerciseItem(ex, i, prefix) {
+  const id = `${prefix}-${i}`;
+  let html = `<div class="ex-item" data-id="${id}" data-answer="${escapeHtml(ex.answer)}" data-type="${ex.type||''}">`;
+  html += `<div class="ex-q">${i+1}. ${escapeHtml(ex.question)}</div>`;
+  if (ex.options && ex.options.length) {
+    html += `<div class="opt-grid">`;
+    ex.options.forEach(opt => {
+      html += `<button class="opt-btn" data-value="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<input type="text" class="ex-input" placeholder="Nhập câu trả lời...">`;
+  }
+  if (ex.hint) html += `<div class="ex-hint">💡 Gợi ý: ${escapeHtml(ex.hint)}</div>`;
+  html += `<div class="ex-feedback"></div>`;
+  html += `</div>`;
+  return html;
+}
+
+function attachLessonHandlers(lesson) {
+  document.querySelectorAll("[data-speak]").forEach(btn => {
+    btn.onclick = () => speak(btn.getAttribute("data-speak"));
+  });
+
+  document.querySelectorAll(".ex-item").forEach(item => {
+    item.querySelectorAll(".opt-btn").forEach(opt => {
+      opt.onclick = () => {
+        item.querySelectorAll(".opt-btn").forEach(o => o.classList.remove("selected"));
+        opt.classList.add("selected");
+      };
+    });
+  });
+
+  const exerciseBtn = document.getElementById("checkExercisesBtn");
+  if (exerciseBtn) {
+    exerciseBtn.onclick = () => {
+      const { correct, total } = gradeSection("#exerciseArea");
+      const pct = Math.round((correct/total)*100);
+      const msg = document.getElementById("exerciseScoreMsg");
+      msg.innerHTML = `<div class="ex-feedback show ${pct>=70?'ok':'bad'}" style="margin-top:10px;">Kết quả: ${correct}/${total} đúng (${pct}%)</div>`;
+      exerciseBtn.disabled = true;
+      lesson._exerciseScore = pct;
+
+      const skipBar = document.getElementById("skipBar");
+      if (skipBar && pct >= 90) {
+        skipBar.style.display = "flex";
+      }
+
+      if (!lesson.quiz || !lesson.quiz.length) {
+        if (!lesson.isUnitTestDay) finishLesson(lesson, pct, pct);
+      }
+    };
+  }
+
+  const skipBtn = document.getElementById("skipToQuizBtn");
+  if (skipBtn) {
+    skipBtn.onclick = () => {
+      document.getElementById("skipBar").style.display = "none";
+      const quizStartBtn = document.getElementById("startQuizBtn");
+      if (quizStartBtn) quizStartBtn.click();
+      else finishLesson(lesson, lesson._exerciseScore || 90, lesson._exerciseScore || 90);
+    };
+  }
+
+  const startQuizBtn = document.getElementById("startQuizBtn");
+  if (startQuizBtn) {
+    startQuizBtn.onclick = () => {
+      document.getElementById("quizArea").style.display = "block";
+      startQuizBtn.style.display = "none";
+      const checkQuizBtn = document.createElement("button");
+      checkQuizBtn.className = "btn btn-primary btn-block";
+      checkQuizBtn.textContent = "Nộp bài kiểm tra";
+      checkQuizBtn.style.marginTop = "10px";
+      checkQuizBtn.onclick = () => {
+        const { correct, total } = gradeSection("#quizArea");
+        const pct = Math.round((correct/total)*100);
+        document.getElementById("quizScoreMsg").innerHTML =
+          `<div class="ex-feedback show ${pct>=70?'ok':'bad'}" style="margin-top:10px;">Điểm bài kiểm tra: ${correct}/${total} (${pct}%)</div>`;
+        checkQuizBtn.disabled = true;
+        finishLesson(lesson, lesson._exerciseScore || pct, pct);
+
+        if (lesson.isUnitTestDay) {
+          State.progress.testResults[lesson.day] = { score: correct, total, pct, date: todayStr() };
+          pushToFirebase();
+        }
+      };
+      document.getElementById("quizArea").after(checkQuizBtn);
+    };
+  }
+
+  const prevBtn = document.getElementById("prevDayBtn");
+  if (prevBtn) prevBtn.onclick = () => { State.currentDay = Math.max(1, State.currentDay-1); renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+  const nextBtn = document.getElementById("nextDayBtn");
+  if (nextBtn) nextBtn.onclick = () => { State.currentDay = Math.min(100, State.currentDay+1); renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+}
+
+function gradeSection(selector) {
+  const items = document.querySelectorAll(`${selector} .ex-item`);
+  let correct = 0;
+  items.forEach(item => {
+    const answer = item.getAttribute("data-answer");
+    const fb = item.querySelector(".ex-feedback");
+    let userVal = "";
+    const selectedOpt = item.querySelector(".opt-btn.selected");
+    if (selectedOpt) {
+      userVal = selectedOpt.getAttribute("data-value");
+    } else {
+      const input = item.querySelector(".ex-input");
+      if (input) userVal = input.value;
+    }
+    const isCorrect = normalize(userVal) === normalize(answer);
+    if (item.querySelectorAll(".opt-btn").length) {
+      item.querySelectorAll(".opt-btn").forEach(o => {
+        if (normalize(o.getAttribute("data-value")) === normalize(answer)) o.classList.add("correct");
+        else if (o.classList.contains("selected")) o.classList.add("wrong");
+        o.onclick = null;
+      });
+    }
+    if (isCorrect) correct++;
+    fb.classList.add("show", isCorrect ? "ok" : "bad");
+    fb.textContent = isCorrect ? "✓ Chính xác!" : `✗ Đáp án đúng: ${answer}`;
+    const input = item.querySelector(".ex-input");
+    if (input) input.disabled = true;
+  });
+  return { correct, total: items.length || 1 };
+}
+
+function finishLesson(lesson, exerciseScore, quizScore) {
+  if (!isDayCompleted(lesson.day)) {
+    State.progress.completedDays[lesson.day] = {
+      completedAt: todayStr(),
+      exerciseScore: exerciseScore + "%",
+      quizScore: quizScore + "%"
+    };
+    addToSRS(lesson.day);
+    touchStreak();
+    pushToFirebase();
+  }
+  setTimeout(() => { renderAll(); }, 600);
+}
+
+// ============================================================
+// RENDER: Review (SRS) view
+// ============================================================
+function renderReviewView() {
+  const container = document.getElementById("reviewContainer");
+  const due = getDueSRSCards();
+  if (due.length === 0) {
+    const allCards = Object.entries(State.progress.srsCards);
+    container.innerHTML = `
+      <div class="card">
+        <div class="empty-state">
+          <div class="ti">✨</div>
+          <div>Không có gì cần ôn hôm nay.<br>Quay lại sau khi học bài mới nhé!</div>
+        </div>
+      </div>
+      ${allCards.length ? renderSRSList(allCards) : ""}
+    `;
+    return;
+  }
+
+  let html = `<div class="card"><div class="section-label"><span class="num">${due.length}</span>Cần ôn hôm nay</div>`;
+  due.forEach(card => {
+    const lesson = getLessonByDay(card.dayNum);
+    if (!lesson) return;
+    const q = lesson.quiz && lesson.quiz.length ? lesson.quiz[0] : (lesson.exercises[0]);
+    html += `
+      <div class="ex-item" data-day="${card.dayNum}" data-answer="${escapeHtml(q.answer)}">
+        <div class="ex-q">Ngày ${card.dayNum} · ${escapeHtml(lesson.title)}<br>${escapeHtml(q.question)}</div>
+        ${q.options ? `<div class="opt-grid">${q.options.map(o=>`<button class="opt-btn" data-value="${escapeHtml(o)}">${escapeHtml(o)}</button>`).join("")}</div>`
+                     : `<input type="text" class="ex-input" placeholder="Nhập câu trả lời...">`}
+        <div class="ex-feedback"></div>
+        <button class="btn btn-ghost btn-sm ex-check" data-day="${card.dayNum}">Kiểm tra</button>
+      </div>`;
+  });
+  html += `</div>`;
+  container.innerHTML = html;
+
+  container.querySelectorAll(".opt-btn").forEach(opt => {
+    opt.onclick = () => {
+      const parent = opt.closest(".ex-item");
+      parent.querySelectorAll(".opt-btn").forEach(o=>o.classList.remove("selected"));
+      opt.classList.add("selected");
+    };
+  });
+
+  container.querySelectorAll(".ex-check").forEach(btn => {
+    btn.onclick = () => {
+      const item = btn.closest(".ex-item");
+      const answer = item.getAttribute("data-answer");
+      const dayNum = parseInt(item.getAttribute("data-day"));
+      let userVal = "";
+      const sel = item.querySelector(".opt-btn.selected");
+      if (sel) userVal = sel.getAttribute("data-value");
+      else { const inp = item.querySelector(".ex-input"); if (inp) userVal = inp.value; }
+      const isCorrect = normalize(userVal) === normalize(answer);
+      const fb = item.querySelector(".ex-feedback");
+      fb.classList.add("show", isCorrect ? "ok" : "bad");
+      fb.textContent = isCorrect ? "✓ Chính xác! Khoảng ôn tiếp theo sẽ dài hơn." : `✗ Đáp án đúng: ${answer}. Sẽ ôn lại sớm hơn.`;
+      btn.disabled = true;
+      reviewSRSCard(dayNum, isCorrect);
+      setTimeout(renderReviewView, 900);
+    };
+  });
+}
+
+function renderSRSList(allCards) {
+  let html = `<div class="card"><div class="section-label"><span class="num">i</span>Toàn bộ thẻ ôn tập</div>`;
+  allCards.sort((a,b)=>a[1].dueDate.localeCompare(b[1].dueDate)).forEach(([key, card]) => {
+    const dayNum = key.replace("day-","");
+    const lesson = getLessonByDay(parseInt(dayNum));
+    html += `
+      <div class="srs-item">
+        <div>
+          <div class="srs-title">Ngày ${dayNum} · ${lesson ? escapeHtml(lesson.title) : ""}</div>
+          <div class="srs-due">Ôn tiếp theo: ${card.dueDate}</div>
+        </div>
+        <div class="box-dot">${[1,2,3,4,5].map(n=>`<span class="${n<=card.box?'fill':''}"></span>`).join("")}</div>
+      </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+// ============================================================
+// RENDER: Stats view
+// ============================================================
+function renderStatsView() {
+  const doneCount = Object.keys(State.progress.completedDays).length;
+  const srsCount = Object.keys(State.progress.srsCards).length;
+  const masteredCount = Object.values(State.progress.srsCards).filter(c => c.box >= 5).length;
+  document.getElementById("statGrid").innerHTML = `
+    <div class="stat-box"><div class="stat-num">${doneCount}</div><div class="stat-label">Ngày hoàn thành</div></div>
+    <div class="stat-box"><div class="stat-num">${State.progress.streak||0}</div><div class="stat-label">Streak hiện tại</div></div>
+    <div class="stat-box"><div class="stat-num">${srsCount}</div><div class="stat-label">Thẻ đang ôn</div></div>
+    <div class="stat-box"><div class="stat-num">${masteredCount}</div><div class="stat-label">Đã thuộc lòng</div></div>
+  `;
+  const testHistory = document.getElementById("testHistory");
+  const tests = Object.entries(State.progress.testResults);
+  if (!tests.length) {
+    testHistory.innerHTML = `<div class="empty-state"><div class="ti">📝</div>Chưa có bài kiểm tra tổng hợp nào.</div>`;
+  } else {
+    testHistory.innerHTML = tests.sort((a,b)=>parseInt(a[0])-parseInt(b[0])).map(([day, r]) => `
+      <div class="srs-item">
+        <div>
+          <div class="srs-title">Bài test ngày ${day}</div>
+          <div class="srs-due">${r.date}</div>
+        </div>
+        <div style="font-weight:700;color:var(--navy);">${r.score}/${r.total} (${r.pct}%)</div>
+      </div>`).join("");
+  }
+}
+
+// ============================================================
+// VIEW SWITCHING
+// ============================================================
+function switchView(view) {
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById(`view-${view}`).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+  if (view === "review") renderReviewView();
+  if (view === "stats") renderStatsView();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.onclick = () => switchView(btn.dataset.view);
+});
+
+function renderAll() {
+  renderHero();
+  renderDueReviewBanner();
+  renderLesson();
+}
+
+// ============================================================
+// INIT / SETUP MODAL
+// ============================================================
+async function initUser(name) {
+  State.userName = name;
+  State.userId = name.toLowerCase().trim().replace(/[^a-z0-9]/g, "_") || "user_" + Date.now();
+  SafeStorage.setItem(LS_USER_KEY, JSON.stringify({ name: State.userName, id: State.userId }));
+  loadLocal();
+  try {
+    firebaseReady = await setupFirebase();
+    if (firebaseReady) {
+      await pullFromFirebase();
+      listenFirebaseLive();
+    }
+  } catch (e) {
+    console.warn("Đồng bộ Firebase gặp lỗi, tiếp tục với dữ liệu trên máy.", e);
+    firebaseReady = false;
+  }
+  State.currentDay = getNextUnlockedDay();
+  document.getElementById("setupModal").classList.add("hidden");
+  renderAll();
+}
+
+document.getElementById("setupStartBtn").onclick = () => {
+  const val = document.getElementById("userNameInput").value.trim();
+  if (!val) { document.getElementById("userNameInput").focus(); return; }
+  initUser(val).catch(e => console.error("Lỗi khởi tạo:", e));
+};
+document.getElementById("userNameInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") document.getElementById("setupStartBtn").click();
+});
+
+(function boot() {
+  try {
+    const saved = SafeStorage.getItem(LS_USER_KEY);
+    if (saved) {
+      const { name } = JSON.parse(saved);
+      if (name) {
+        initUser(name).catch(e => {
+          console.error("Lỗi khởi động, hiện màn hình nhập tên.", e);
+          document.getElementById("setupModal").classList.remove("hidden");
+        });
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn("Không đọc được dữ liệu đã lưu, bắt đầu lại từ đầu.", e);
+  }
+  document.getElementById("setupModal").classList.remove("hidden");
+})();
+</script>
+
+</body>
+</html>
+
+
