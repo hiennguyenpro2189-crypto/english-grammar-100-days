@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>100 Ngày Từ Vựng · English in 100 Days</title>
+<style>
+  :root{
+    --paper: #f6f1e7;
+    --paper-deep: #efe7d6;
+    --ink: #1f2a37;
+    --ink-soft: #4b5563;
+    --navy: #1d3557;
+    --navy-deep: #14253f;
+    --gold: #c08a2e;
+    --rust: #b5512f;
+    --sage: #5c7a5e;
+    --teal: #2d6a6a;
+    --teal-light: #eaf2ee;
+    --line: #d8cdb4;
+    --card: #fffdf8;
+    --shadow: 0 1px 2px rgba(31,42,55,.06), 0 8px 24px rgba(31,42,55,.07);
+    --radius: 14px;
+    --serif: "Iowan Old Style","Palatino Linotype","Noto Serif","Georgia",serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif;
+    --mono: "SF Mono","JetBrains Mono","Menlo",monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 20% 0%, rgba(45,106,106,.06), transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(29,53,87,.04), transparent 45%);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  .app{max-width:760px;margin:0 auto;padding:0 16px;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(246,241,231,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:12px 0;
+  }
+  .topbar-inner{max-width:760px;margin:0 auto;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .brand{display:flex;align-items:baseline;gap:8px;}
+  .brand-mark{font-family:var(--serif);font-weight:700;font-size:19px;color:var(--teal);letter-spacing:.2px;}
+  .brand-sub{font-size:11px;color:var(--ink-soft);letter-spacing:.4px;}
+  .streak-pill{
+    display:flex;align-items:center;gap:6px;
+    background:var(--card);border:1px solid var(--line);
+    border-radius:999px;padding:6px 12px;
+    font-size:13px;font-weight:600;color:var(--rust);
+    box-shadow:var(--shadow);
+  }
+  .streak-pill .flame{font-size:14px;}
+
+  /* ---------- Hero / Progress ---------- */
+  .hero{padding:22px 0 14px;}
+  .hero-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:14px;}
+  .hero-title{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy-deep);line-height:1.25;}
+  .hero-title em{font-style:normal;color:var(--teal);}
+  .hero-meta{font-size:13px;color:var(--ink-soft);margin-top:4px;}
+
+  .progress-track{position:relative;height:10px;border-radius:6px;background:var(--paper-deep);border:1px solid var(--line);overflow:hidden;}
+  .progress-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--teal),var(--navy));transition:width .5s ease;}
+  .progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-top:6px;}
+
+  .day-rail{display:flex;gap:6px;overflow-x:auto;padding:14px 2px 4px;scrollbar-width:none;}
+  .day-rail::-webkit-scrollbar{display:none;}
+  .day-chip{
+    flex:0 0 auto;width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;font-family:var(--mono);
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);
+    cursor:pointer;transition:transform .15s ease,border-color .15s ease;
+  }
+  .day-chip:hover{transform:translateY(-2px);}
+  .day-chip.done{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .day-chip.today{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 0 0 3px rgba(29,53,87,.18);}
+  .day-chip.locked{opacity:.4;cursor:not-allowed;}
+
+  /* theme badges on chip */
+  .day-chip[data-theme="Công việc"].done{background:var(--rust);border-color:var(--rust);}
+  .day-chip[data-theme="Du lịch"].done{background:var(--gold);border-color:var(--gold);}
+
+  /* ---------- Cards ---------- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:16px;}
+  .card-today{border-color:var(--teal);background:linear-gradient(180deg,#fffefb,var(--card));}
+
+  .lesson-eyebrow{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:6px;}
+  .lesson-title{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--navy-deep);margin-bottom:4px;}
+  .theme-tag{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11px;font-weight:700;border-radius:6px;padding:3px 9px;margin-bottom:12px;
+  }
+  .theme-tag.life{background:var(--teal-light);color:var(--teal);}
+  .theme-tag.work{background:rgba(181,81,47,.1);color:var(--rust);}
+  .theme-tag.travel{background:rgba(192,138,46,.1);color:var(--gold);}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    border-radius:10px;border:1px solid transparent;padding:11px 18px;
+    font-size:14px;font-weight:600;cursor:pointer;transition:transform .12s ease,opacity .12s ease;
+    font-family:var(--sans);
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{background:var(--navy);color:#fff;}
+  .btn-primary:hover{background:var(--navy-deep);}
+  .btn-teal{background:var(--teal);color:#fff;}
+  .btn-teal:hover{opacity:.88;}
+  .btn-rust{background:var(--rust);color:#fff;}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--navy);}
+  .btn-gold{background:var(--gold);color:#fff;}
+  .btn-block{width:100%;}
+  .btn-sm{padding:7px 12px;font-size:12.5px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  .skip-bar{
+    display:flex;align-items:center;justify-content:space-between;
+    background:rgba(45,106,106,.07);border:1px dashed var(--teal);
+    border-radius:10px;padding:10px 14px;margin:14px 0;font-size:13px;color:var(--ink);
+  }
+
+  /* ---------- Tabs inside lesson ---------- */
+  .lesson-tabs{display:flex;gap:4px;background:var(--paper-deep);border-radius:10px;padding:4px;margin-bottom:16px;}
+  .lesson-tab{
+    flex:1;padding:8px 4px;border:none;border-radius:7px;font-size:12.5px;font-weight:600;
+    font-family:var(--sans);cursor:pointer;color:var(--ink-soft);background:transparent;transition:all .15s;
+  }
+  .lesson-tab.active{background:var(--card);color:var(--teal);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+
+  /* ---------- Vocab item ---------- */
+  .vocab-list{display:flex;flex-direction:column;gap:10px;}
+  .vocab-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px;transition:border-color .15s;
+  }
+  .vocab-item.checked{border-color:var(--teal);background:linear-gradient(135deg,#f8fdfb,var(--card));}
+  .vocab-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px;}
+  .vocab-term{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--navy-deep);}
+  .vocab-pos{font-size:10.5px;font-weight:700;color:var(--ink-soft);background:var(--paper-deep);border-radius:5px;padding:2px 7px;align-self:center;}
+  .vocab-ipa{font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-bottom:4px;}
+  .vocab-meaning{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .vocab-example-en{font-size:13.5px;color:var(--ink);font-style:italic;line-height:1.5;}
+  .vocab-example-vi{font-size:12.5px;color:var(--ink-soft);margin-top:3px;}
+  .vocab-actions{display:flex;align-items:center;gap:8px;margin-top:10px;}
+  .check-btn{
+    flex:1;padding:8px;border-radius:8px;border:1px solid var(--line);
+    font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--sans);
+    background:var(--paper);color:var(--ink-soft);transition:all .15s;
+  }
+  .check-btn.done{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .speak-btn{
+    width:32px;height:32px;border-radius:50%;border:1px solid var(--line);
+    background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-size:14px;color:var(--teal);flex-shrink:0;transition:background .12s;
+  }
+  .speak-btn:active{background:var(--teal-light);}
+
+  /* ---------- Dialogue ---------- */
+  .dialogue-box{display:flex;flex-direction:column;gap:10px;}
+  .dialogue-line{display:flex;gap:10px;align-items:flex-start;}
+  .dialogue-line.you{flex-direction:row-reverse;}
+  .dialogue-avatar{
+    flex:0 0 auto;width:30px;height:30px;border-radius:50%;
+    background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;font-family:var(--serif);
+  }
+  .dialogue-line.you .dialogue-avatar{background:var(--teal);}
+  .dialogue-bubble{
+    background:var(--paper-deep);border-radius:12px;padding:10px 13px;flex:1;
+    border-top-left-radius:4px;
+  }
+  .dialogue-line.you .dialogue-bubble{background:rgba(45,106,106,.12);border-top-left-radius:12px;border-top-right-radius:4px;}
+  .dialogue-speaker{font-size:11px;font-weight:700;color:var(--teal);margin-bottom:3px;}
+  .dialogue-en{font-size:14px;color:var(--ink);line-height:1.5;}
+  .dialogue-vi{font-size:12.5px;color:var(--ink-soft);margin-top:3px;}
+  .dialogue-speak{
+    flex:0 0 auto;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);
+    background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-size:13px;color:var(--teal);align-self:center;
+  }
+  .dialogue-speak:active{transform:scale(.9);}
+
+  /* ---------- Test / Quiz ---------- */
+  .ex-item{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:var(--card);}
+  .ex-q{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.5;}
+  .ex-hint{font-size:12px;color:var(--ink-soft);margin-top:5px;font-style:italic;}
+  .ex-input{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
+    font-size:14px;font-family:var(--sans);background:var(--paper);color:var(--ink);
+  }
+  .ex-input:focus{outline:none;border-color:var(--teal);background:#fff;}
+  .opt-grid{display:flex;flex-direction:column;gap:8px;}
+  .opt-btn{
+    text-align:left;padding:10px 13px;border-radius:8px;border:1px solid var(--line);
+    background:var(--paper);font-size:13.5px;cursor:pointer;color:var(--ink);transition:all .12s;
+  }
+  .opt-btn:hover{border-color:var(--teal);}
+  .opt-btn.selected{border-color:var(--teal);background:rgba(45,106,106,.08);font-weight:600;}
+  .opt-btn.correct{border-color:var(--sage);background:rgba(92,122,94,.14);font-weight:600;}
+  .opt-btn.wrong{border-color:var(--rust);background:rgba(181,81,47,.1);}
+  .ex-feedback{margin-top:10px;font-size:13px;padding:9px 12px;border-radius:8px;display:none;}
+  .ex-feedback.show{display:block;}
+  .ex-feedback.ok{background:rgba(92,122,94,.14);color:#2f4730;}
+  .ex-feedback.bad{background:rgba(181,81,47,.1);color:#7a3520;}
+
+  /* ---------- Progress checklist bar ---------- */
+  .checklist-bar{
+    background:var(--paper-deep);border-radius:10px;padding:10px 14px;
+    display:flex;align-items:center;gap:12px;margin-bottom:14px;
+  }
+  .checklist-bar-track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
+  .checklist-bar-fill{height:100%;background:var(--teal);border-radius:3px;transition:width .3s;}
+  .checklist-bar-label{font-size:12px;color:var(--ink-soft);white-space:nowrap;}
+
+  /* ---------- Section labels ---------- */
+  .section-label{
+    display:flex;align-items:center;gap:8px;
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+    color:var(--teal);margin:20px 0 10px;
+  }
+  .section-label .num{
+    width:20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-family:var(--mono);
+  }
+
+  /* ---------- Test result ---------- */
+  .result-card{text-align:center;padding:24px 16px;}
+  .result-score{font-family:var(--serif);font-size:52px;font-weight:700;color:var(--teal);}
+  .result-label{font-size:15px;color:var(--ink-soft);margin-top:4px;}
+  .result-emoji{font-size:40px;margin-bottom:12px;}
+
+  /* ---------- Stats ---------- */
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .stat-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;}
+  .stat-num{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy-deep);}
+  .stat-label{font-size:11px;color:var(--ink-soft);margin-top:2px;text-transform:uppercase;letter-spacing:.3px;}
+
+  .srs-item{
+    display:flex;justify-content:space-between;align-items:center;
+    border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:8px;background:var(--card);
+  }
+  .srs-item .srs-title{font-size:13.5px;font-weight:600;color:var(--ink);}
+  .srs-item .srs-due{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+  .box-dot{display:flex;gap:3px;}
+  .box-dot span{width:7px;height:7px;border-radius:50%;background:var(--line);}
+  .box-dot span.fill{background:var(--teal);}
+
+  /* ---------- Bottom tab bar ---------- */
+  .tabbar{
+    position:fixed;bottom:0;left:0;right:0;z-index:50;
+    background:rgba(246,241,231,.96);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom));
+  }
+  .tab-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    background:none;border:none;color:var(--ink-soft);font-size:10.5px;font-family:var(--sans);
+    padding:6px 0;cursor:pointer;font-weight:600;
+  }
+  .tab-btn .ti{font-size:18px;}
+  .tab-btn.active{color:var(--teal);}
+
+  .view{display:none;padding-bottom:80px;}
+  .view.active{display:block;}
+
+  /* ---------- Setup modal ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(20,37,63,.55);z-index:100;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.hidden{display:none;}
+  .modal-box{
+    background:var(--card);border-radius:16px;padding:26px 22px;max-width:380px;width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+  }
+  .modal-box h2{font-family:var(--serif);font-size:21px;color:var(--navy-deep);margin:0 0 8px;}
+  .modal-box p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin:0 0 16px;}
+  .modal-box input{
+    width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;
+    font-size:14px;margin-bottom:12px;font-family:var(--sans);
+  }
+
+  .empty-state{text-align:center;padding:40px 16px;color:var(--ink-soft);}
+  .empty-state .ti{font-size:34px;margin-bottom:10px;}
+
+  @media(max-width:380px){.hero-title{font-size:22px;}.vocab-term{font-size:17px;}}
+</style>
+</head>
+<body>
+
+<!-- ============ SETUP MODAL ============ -->
+<div id="setupModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h2>Chào mừng 👋</h2>
+    <p>Nhập <b>cùng tên</b> bạn đã dùng ở app Ngữ Pháp để tiến độ hai app được lưu riêng nhau nhưng dùng chung Firebase. Dữ liệu chỉ dùng để lưu tiến trình cá nhân.</p>
+    <input type="text" id="userNameInput" placeholder="VD: Minh" maxlength="40">
+    <button class="btn btn-teal btn-block" id="setupStartBtn">Bắt đầu học</button>
+  </div>
+</div>
+
+<div class="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">100 Ngày</span>
+        <span class="brand-sub">TỪ&nbsp;VỰNG</span>
+      </div>
+      <div class="streak-pill"><span class="flame">🔥</span><span id="streakCount">0</span> ngày</div>
+    </div>
+  </div>
+
+  <!-- ============ VIEW: HOME ============ -->
+  <div class="view active" id="view-home">
+    <div class="hero">
+      <div class="hero-row">
+        <div>
+          <div class="hero-title">Ngày <em id="currentDayNum">1</em> / 100</div>
+          <div class="hero-meta" id="heroMeta">Sẵn sàng bắt đầu hành trình của bạn</div>
+        </div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="progress-label"><span id="progressPct">0% hoàn thành</span><span id="progressDoneCount">0/100 ngày</span></div>
+      <div class="day-rail" id="dayRail"></div>
+    </div>
+    <div id="dueReviewBanner"></div>
+    <div id="lessonContainer"></div>
+  </div>
+
+  <!-- ============ VIEW: REVIEW (SRS) ============ -->
+  <div class="view" id="view-review">
+    <div class="hero">
+      <div class="hero-title" style="font-size:22px;">Ôn tập từ vựng</div>
+      <div class="hero-meta">Hệ thống nhắc bạn ôn đúng lúc sắp quên — theo nguyên lý Leitner.</div>
+    </div>
+    <div id="reviewContainer"></div>
+  </div>
+
+  <!-- ============ VIEW: STATS ============ -->
+  <div class="view" id="view-stats">
+    <div class="hero">
+      <div class="hero-title" style="font-size:22px;">Tiến độ của bạn</div>
+    </div>
+    <div class="stat-grid" id="statGrid"></div>
+    <div class="card">
+      <div class="section-label"><span class="num">✓</span>Lịch sử bài test</div>
+      <div id="testHistory"></div>
+    </div>
+    <div class="card">
+      <div class="section-label"><span class="num">i</span>Toàn bộ thẻ ôn tập</div>
+      <div id="srsAllList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tabbar">
+  <button class="tab-btn active" data-view="home"><span class="ti">📗</span>Học</button>
+  <button class="tab-btn" data-view="review"><span class="ti">🔄</span>Ôn tập</button>
+  <button class="tab-btn" data-view="stats"><span class="ti">📊</span>Tiến độ</button>
+</div>
+
+<script>
+// ============================================================
+// FIREBASE — cùng project với app Ngữ Pháp
+// Dữ liệu lưu tại: users/{userId}/vocab_progress  (tách riêng)
+// ============================================================
+let initializeApp, getDatabase, ref, get, set, onValue;
+let fbApp, db, firebaseReady = false;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB6YdAodoJNsZB2LNdQz7M5WLtgGH0dhXw",
+  authDomain: "english-grammar-100-days.firebaseapp.com",
+  databaseURL: "https://english-grammar-100-days-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "english-grammar-100-days",
+  storageBucket: "english-grammar-100-days.firebasestorage.app",
+  messagingSenderId: "657525186970",
+  appId: "1:657525186970:web:acdc29c1caa9864f645a23"
+};
+
+const isFileProtocol = window.location.protocol === "file:";
+
+async function setupFirebase() {
+  if (isFileProtocol) { console.warn("Mở qua file:// — bỏ qua Firebase."); return false; }
+  try {
+    const appMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const dbMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+    initializeApp = appMod.initializeApp;
+    getDatabase = dbMod.getDatabase;
+    ref = dbMod.ref; get = dbMod.get; set = dbMod.set; onValue = dbMod.onValue;
+    fbApp = initializeApp(firebaseConfig);
+    db = getDatabase(fbApp);
+    return true;
+  } catch (e) {
+    console.warn("Firebase init thất bại, dùng localStorage.", e);
+    return false;
+  }
+}
+
+// ============================================================
+// LESSON DATA — 10 ngày mẫu (Days 1-10)
+// Mỗi ngày: 10 từ + 10 cụm từ + hội thoại + 10 câu test
+// Chủ đề xoay vòng: Đời sống / Công việc CSM-SaaS / Du lịch
+// ============================================================
+const ALL_DAYS = [
+  // ── DAY 1 ── Đời sống: Thói quen hằng ngày
+  {
+    day:1, theme:"Đời sống", topic:"Thói quen hằng ngày & giới thiệu bản thân",
+    words:[
+      {term:"habit",ipa:"/ˈhæb.ɪt/",pos:"n",meaning:"thói quen",
+       ex:"Reading before bed has become a daily habit for me.",exVi:"Đọc sách trước khi ngủ đã trở thành thói quen hằng ngày của tôi."},
+      {term:"routine",ipa:"/ruːˈtiːn/",pos:"n",meaning:"lịch trình, thói quen lặp lại",
+       ex:"My morning routine starts with a cup of coffee.",exVi:"Lịch trình buổi sáng của tôi bắt đầu bằng một tách cà phê."},
+      {term:"exhausted",ipa:"/ɪɡˈzɔː.stɪd/",pos:"adj",meaning:"kiệt sức",
+       ex:"I'm exhausted after working a 10-hour shift.",exVi:"Tôi kiệt sức sau khi làm ca 10 tiếng."},
+      {term:"achieve",ipa:"/əˈtʃiːv/",pos:"v",meaning:"đạt được",
+       ex:"She worked hard to achieve her career goals.",exVi:"Cô ấy làm việc chăm chỉ để đạt được mục tiêu sự nghiệp."},
+      {term:"improve",ipa:"/ɪmˈpruːv/",pos:"v",meaning:"cải thiện",
+       ex:"I want to improve my English speaking skills.",exVi:"Tôi muốn cải thiện kỹ năng nói tiếng Anh."},
+      {term:"consistent",ipa:"/kənˈsɪs.tənt/",pos:"adj",meaning:"kiên định, nhất quán",
+       ex:"Being consistent is more important than being perfect.",exVi:"Kiên định quan trọng hơn là hoàn hảo."},
+      {term:"schedule",ipa:"/ˈskedʒ.uːl/",pos:"n/v",meaning:"lịch trình; lên lịch",
+       ex:"Can we schedule a call for tomorrow morning?",exVi:"Chúng ta có thể lên lịch một cuộc gọi vào sáng mai không?"},
+      {term:"balance",ipa:"/ˈbæl.əns/",pos:"n",meaning:"sự cân bằng",
+       ex:"It's hard to find a balance between work and family.",exVi:"Thật khó để tìm sự cân bằng giữa công việc và gia đình."},
+      {term:"motivated",ipa:"/ˈmoʊ.tɪ.veɪ.tɪd/",pos:"adj",meaning:"có động lực",
+       ex:"I feel motivated when I see real progress.",exVi:"Tôi cảm thấy có động lực khi thấy tiến bộ thật sự."},
+      {term:"stick to",ipa:"/stɪk tuː/",pos:"phr v",meaning:"tuân thủ, kiên trì theo",
+       ex:"It's not easy to stick to a new habit for 100 days.",exVi:"Không dễ để kiên trì theo một thói quen mới trong 100 ngày."}
+    ],
+    phrases:[
+      {term:"get used to",ipa:"/ɡet juːzd tuː/",meaning:"quen với (việc gì)",
+       ex:"I'm getting used to waking up early now.",exVi:"Bây giờ tôi đang dần quen với việc dậy sớm."},
+      {term:"in the long run",ipa:"/ɪn ðə lɒŋ rʌn/",meaning:"về lâu dài",
+       ex:"Small habits make a big difference in the long run.",exVi:"Những thói quen nhỏ tạo ra khác biệt lớn về lâu dài."},
+      {term:"make progress",ipa:"/meɪk ˈprɒɡ.res/",meaning:"có tiến bộ",
+       ex:"I've made a lot of progress since last month.",exVi:"Tôi đã có nhiều tiến bộ kể từ tháng trước."},
+      {term:"from scratch",ipa:"/frəm skrætʃ/",meaning:"từ đầu, từ con số không",
+       ex:"I had to start learning English from scratch.",exVi:"Tôi đã phải bắt đầu học tiếng Anh từ con số không."},
+      {term:"on a daily basis",ipa:"/ɒn ə ˈdeɪ.li ˈbeɪ.sɪs/",meaning:"hằng ngày",
+       ex:"I practice speaking on a daily basis.",exVi:"Tôi luyện nói hằng ngày."},
+      {term:"take it one step at a time",ipa:"/teɪk ɪt wʌn step ət ə taɪm/",meaning:"từng bước một",
+       ex:"Don't worry about the whole plan — take it one step at a time.",exVi:"Đừng lo về cả kế hoạch — hãy làm từng bước một."},
+      {term:"burn out",ipa:"/bɜːn aʊt/",meaning:"kiệt sức (do làm việc quá sức)",
+       ex:"If you don't rest, you'll burn out quickly.",exVi:"Nếu không nghỉ ngơi, bạn sẽ kiệt sức nhanh thôi."},
+      {term:"keep up with",ipa:"/kiːp ʌp wɪð/",meaning:"theo kịp",
+       ex:"I'm trying to keep up with my study plan.",exVi:"Tôi đang cố theo kịp kế hoạch học của mình."},
+      {term:"give it a try",ipa:"/ɡɪv ɪt ə traɪ/",meaning:"thử làm gì đó",
+       ex:"I've never done yoga before, but I'll give it a try.",exVi:"Tôi chưa bao giờ tập yoga, nhưng tôi sẽ thử."},
+      {term:"work in progress",ipa:"/wɜːk ɪn ˈprɒɡ.res/",meaning:"việc đang thực hiện, chưa hoàn thiện",
+       ex:"My English is still a work in progress.",exVi:"Tiếng Anh của tôi vẫn đang trong quá trình hoàn thiện."}
+    ],
+    dialogue:{
+      title:"Nói chuyện với đồng nghiệp về thói quen học tiếng Anh",
+      lines:[
+        {speaker:"Mai",you:false,en:"Hey, I heard you're learning English every day now. What's your routine?",vi:"Ê, nghe nói bạn đang học tiếng Anh mỗi ngày. Lịch trình của bạn thế nào?"},
+        {speaker:"You",you:true, en:"Yeah, I'm trying to stick to a habit of studying on a daily basis — ten words a day.",vi:"Ừ, tôi đang cố kiên trì thói quen học hằng ngày — mười từ mỗi ngày."},
+        {speaker:"Mai",you:false,en:"That sounds intense. Don't you get exhausted?",vi:"Nghe có vẻ căng đấy. Bạn không kiệt sức sao?"},
+        {speaker:"You",you:true, en:"Sometimes, but I just take it one step at a time. I don't want to burn out.",vi:"Đôi khi có, nhưng tôi cứ từng bước một thôi. Tôi không muốn bị kiệt sức."},
+        {speaker:"Mai",you:false,en:"Smart. Are you seeing any results yet?",vi:"Thông minh đấy. Bạn thấy kết quả chưa?"},
+        {speaker:"You",you:true, en:"Yeah, I've made a lot of progress. It's still a work in progress, but I feel more motivated every week.",vi:"Rồi, tôi đã có nhiều tiến bộ. Vẫn đang trên đường hoàn thiện, nhưng tôi cảm thấy có động lực hơn mỗi tuần."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"I'm exhausted\" có nghĩa gần nhất với:",opts:["Tôi rất vui","Tôi kiệt sức","Tôi đói","Tôi bận"],ans:1},
+      {type:"mc",q:"Chọn từ đúng: \"It's hard to find a ___ between work and family.\"",opts:["habit","balance","schedule","routine"],ans:1},
+      {type:"mc",q:"\"In the long run\" nghĩa là gì?",opts:["Ngay bây giờ","Về lâu dài","Trong lúc chạy bộ","Vào cuối tuần"],ans:1},
+      {type:"fill",q:"Điền từ: \"I'm getting ___ ___ waking up early.\" (quen với)",ans:"used to"},
+      {type:"fill",q:"Điền cụm: \"Don't worry — take it one ___ at a ___.\"",ans:"step at a time"},
+      {type:"mc",q:"\"Burn out\" gần nghĩa nhất với:",opts:["Cháy nhà","Kiệt sức vì làm việc quá sức","Bốc cháy","Hết tiền"],ans:1},
+      {type:"mc",q:"Từ nào nghĩa là 'kiên định, nhất quán'?",opts:["motivated","consistent","exhausted","scheduled"],ans:1},
+      {type:"fill",q:"Điền từ: \"I want to ___ my English speaking skills.\" (cải thiện)",ans:"improve"},
+      {type:"mc",q:"\"From scratch\" nghĩa là:",opts:["Từ một nửa","Từ con số không","Từ hôm qua","Bị trầy xước"],ans:1},
+      {type:"mc",q:"Câu nào dùng đúng \"give it a try\"?",opts:["I give it a try yesterday.","I'll give it a try.","I am give it a try.","Give a try it."],ans:1}
+    ]
+  },
+  // ── DAY 2 ── Công việc: Giới thiệu vai trò & công ty
+  {
+    day:2, theme:"Công việc", topic:"Giới thiệu vai trò, công ty và sản phẩm",
+    words:[
+      {term:"role",ipa:"/roʊl/",pos:"n",meaning:"vai trò, vị trí công việc",ex:"My role is to manage relationships with B2B clients.",exVi:"Vai trò của tôi là quản lý mối quan hệ với khách hàng B2B."},
+      {term:"client",ipa:"/ˈklaɪ.ənt/",pos:"n",meaning:"khách hàng (thường là doanh nghiệp)",ex:"We have several clients across the APJ region.",exVi:"Chúng tôi có nhiều khách hàng ở khu vực APJ."},
+      {term:"renewal",ipa:"/rɪˈnjuː.əl/",pos:"n",meaning:"việc gia hạn (hợp đồng)",ex:"The contract renewal is due next month.",exVi:"Việc gia hạn hợp đồng đến hạn vào tháng sau."},
+      {term:"manufacture",ipa:"/ˌmæn.jəˈfæk.tʃər/",pos:"v",meaning:"sản xuất",ex:"Our company manufactures UAVs for commercial use.",exVi:"Công ty chúng tôi sản xuất UAV cho mục đích thương mại."},
+      {term:"distribute",ipa:"/dɪˈstrɪb.juːt/",pos:"v",meaning:"phân phối",ex:"We distribute American software products in Vietnam.",exVi:"Chúng tôi phân phối các sản phẩm phần mềm Mỹ tại Việt Nam."},
+      {term:"department",ipa:"/dɪˈpɑːrt.mənt/",pos:"n",meaning:"phòng ban",ex:"I work closely with the sales department.",exVi:"Tôi làm việc chặt chẽ với phòng kinh doanh."},
+      {term:"responsible",ipa:"/rɪˈspɒn.sə.bəl/",pos:"adj",meaning:"chịu trách nhiệm",ex:"I'm responsible for customer success in this region.",exVi:"Tôi chịu trách nhiệm về thành công khách hàng ở khu vực này."},
+      {term:"industry",ipa:"/ˈɪn.də.stri/",pos:"n",meaning:"ngành (công nghiệp)",ex:"The UAV industry is growing very fast.",exVi:"Ngành UAV đang phát triển rất nhanh."},
+      {term:"headquarters",ipa:"/ˌhedˈkwɔːr.tərz/",pos:"n",meaning:"trụ sở chính",ex:"Our headquarters is located in Hanoi.",exVi:"Trụ sở chính của chúng tôi đặt tại Hà Nội."},
+      {term:"background",ipa:"/ˈbæk.ɡraʊnd/",pos:"n",meaning:"lý lịch, nền tảng kinh nghiệm",ex:"I have a background in customer success and account management.",exVi:"Tôi có nền tảng kinh nghiệm về thành công khách hàng và quản lý tài khoản."}
+    ],
+    phrases:[
+      {term:"in charge of",ipa:"/ɪn tʃɑːrdʒ ʌv/",meaning:"phụ trách",ex:"I'm in charge of renewals for the APJ region.",exVi:"Tôi phụ trách gia hạn hợp đồng cho khu vực APJ."},
+      {term:"report to",ipa:"/rɪˈpɔːrt tuː/",meaning:"báo cáo cho (ai)",ex:"I report to the Customer Success manager.",exVi:"Tôi báo cáo cho quản lý Customer Success."},
+      {term:"work closely with",ipa:"/wɜːk ˈkloʊs.li wɪð/",meaning:"làm việc chặt chẽ với",ex:"We work closely with the engineering team.",exVi:"Chúng tôi làm việc chặt chẽ với đội kỹ thuật."},
+      {term:"based in",ipa:"/beɪst ɪn/",meaning:"có trụ sở/đặt tại",ex:"Our team is based in Vietnam but covers the whole APJ region.",exVi:"Đội của chúng tôi đặt tại Việt Nam nhưng phụ trách cả khu vực APJ."},
+      {term:"a wide range of",ipa:"/ə waɪd reɪndʒ ʌv/",meaning:"đa dạng, một loạt",ex:"We offer a wide range of software solutions.",exVi:"Chúng tôi cung cấp đa dạng các giải pháp phần mềm."},
+      {term:"deal with",ipa:"/diːl wɪð/",meaning:"xử lý, giải quyết",ex:"Part of my job is to deal with renewal negotiations.",exVi:"Một phần công việc của tôi là xử lý các cuộc đàm phán gia hạn."},
+      {term:"day-to-day",ipa:"/ˈdeɪ tə deɪ/",meaning:"hằng ngày (thường ngày)",ex:"My day-to-day tasks include checking client accounts.",exVi:"Công việc hằng ngày của tôi bao gồm kiểm tra tài khoản khách hàng."},
+      {term:"point of contact",ipa:"/pɔɪnt ʌv ˈkɒn.tækt/",meaning:"đầu mối liên hệ",ex:"I'm the main point of contact for this client.",exVi:"Tôi là đầu mối liên hệ chính cho khách hàng này."},
+      {term:"be new to",ipa:"/biː njuː tuː/",meaning:"còn mới với (việc gì)",ex:"I'm still new to this role, but I'm learning fast.",exVi:"Tôi vẫn còn mới với vai trò này, nhưng tôi đang học rất nhanh."},
+      {term:"look forward to",ipa:"/lʊk ˈfɔːr.wərd tuː/",meaning:"mong đợi",ex:"I look forward to working with you on this account.",exVi:"Tôi mong được làm việc cùng bạn về tài khoản này."}
+    ],
+    dialogue:{
+      title:"Tự giới thiệu với khách hàng quốc tế (kickoff call)",
+      lines:[
+        {speaker:"David",you:false,en:"Hi, thanks for joining. Could you tell me a bit about your role?",vi:"Chào, cảm ơn đã tham gia. Bạn có thể cho tôi biết đôi chút về vai trò của bạn không?"},
+        {speaker:"You",you:true, en:"Sure. I'm in charge of renewals for our B2B software clients across the APJ region.",vi:"Chắc chắn rồi. Tôi phụ trách gia hạn cho khách hàng phần mềm B2B của chúng tôi trên khắp khu vực APJ."},
+        {speaker:"David",you:false,en:"Got it. And what does your company actually do?",vi:"Hiểu rồi. Vậy công ty bạn thực sự làm gì?"},
+        {speaker:"You",you:true, en:"We manufacture UAVs and also distribute American software products. I work closely with both the sales and technical teams.",vi:"Chúng tôi sản xuất UAV và cũng phân phối các sản phẩm phần mềm Mỹ. Tôi làm việc chặt chẽ với cả đội kinh doanh lẫn kỹ thuật."},
+        {speaker:"David",you:false,en:"Interesting background. Who do you report to?",vi:"Nền tảng thú vị đấy. Bạn báo cáo cho ai?"},
+        {speaker:"You",you:true, en:"I report to our Customer Success manager. And I'll be your main point of contact going forward.",vi:"Tôi báo cáo cho quản lý Customer Success. Và tôi sẽ là đầu mối liên hệ chính của bạn về sau."},
+        {speaker:"David",you:false,en:"Great, I look forward to working with you.",vi:"Tuyệt, tôi mong được làm việc cùng bạn."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"I'm in charge of renewals\" nghĩa là:",opts:["Tôi ghét việc gia hạn","Tôi phụ trách việc gia hạn","Tôi không liên quan đến gia hạn","Tôi mới học về gia hạn"],ans:1},
+      {type:"fill",q:"Điền từ: \"I ___ to the Customer Success manager.\" (báo cáo cho)",ans:"report"},
+      {type:"mc",q:"\"Headquarters\" nghĩa là:",opts:["Chi nhánh nhỏ","Trụ sở chính","Kho hàng","Văn phòng đại diện"],ans:1},
+      {type:"mc",q:"Từ nào nghĩa là 'phân phối'?",opts:["manufacture","distribute","achieve","deal"],ans:1},
+      {type:"fill",q:"Điền cụm từ: \"I'm the main ___ ___ ___ for this client.\" (đầu mối liên hệ)",ans:"point of contact"},
+      {type:"mc",q:"\"Be new to\" dùng khi nào?",opts:["Khi bạn rất giỏi việc gì đó","Khi bạn còn mới/chưa quen với việc gì đó","Khi bạn ghét việc gì đó","Khi bạn từ chối việc gì đó"],ans:1},
+      {type:"mc",q:"Chọn câu đúng:",opts:["I look forward to work with you.","I look forward to working with you.","I look forward working with you.","I look forward to works with you."],ans:1},
+      {type:"fill",q:"Điền từ: \"Our team is ___ in Vietnam.\" (đặt tại)",ans:"based"},
+      {type:"mc",q:"\"A wide range of\" gần nghĩa nhất với:",opts:["Một loại duy nhất","Đa dạng, nhiều loại","Phạm vi hẹp","Giá cao"],ans:1},
+      {type:"mc",q:"\"Day-to-day tasks\" nghĩa là:",opts:["Công việc một lần","Công việc hằng ngày","Công việc cuối tuần","Công việc đã hủy"],ans:1}
+    ]
+  },
+  // ── DAY 3 ── Du lịch: Sân bay & check-in
+  {
+    day:3, theme:"Du lịch", topic:"Sân bay, check-in và làm thủ tục bay",
+    words:[
+      {term:"departure",ipa:"/dɪˈpɑːr.tʃər/",pos:"n",meaning:"sự khởi hành",ex:"Please arrive two hours before departure.",exVi:"Vui lòng đến trước giờ khởi hành hai tiếng."},
+      {term:"boarding",ipa:"/ˈbɔːr.dɪŋ/",pos:"n",meaning:"việc lên máy bay",ex:"Boarding starts thirty minutes before the flight.",exVi:"Việc lên máy bay bắt đầu ba mươi phút trước chuyến bay."},
+      {term:"luggage",ipa:"/ˈlʌɡ.ɪdʒ/",pos:"n",meaning:"hành lý",ex:"You're allowed one piece of checked luggage.",exVi:"Bạn được phép mang một kiện hành lý ký gửi."},
+      {term:"passport",ipa:"/ˈpæs.pɔːrt/",pos:"n",meaning:"hộ chiếu",ex:"Don't forget to bring your passport to the airport.",exVi:"Đừng quên mang hộ chiếu đến sân bay."},
+      {term:"delayed",ipa:"/dɪˈleɪd/",pos:"adj",meaning:"bị trễ, hoãn",ex:"Our flight was delayed by two hours.",exVi:"Chuyến bay của chúng tôi bị trễ hai tiếng."},
+      {term:"gate",ipa:"/ɡeɪt/",pos:"n",meaning:"cổng (lên máy bay)",ex:"The gate number is shown on your boarding pass.",exVi:"Số cổng được hiển thị trên thẻ lên tàu của bạn."},
+      {term:"security",ipa:"/sɪˈkjʊr.ə.ti/",pos:"n",meaning:"an ninh, kiểm tra an ninh",ex:"We need to go through security before reaching the gate.",exVi:"Chúng ta cần qua kiểm tra an ninh trước khi đến cổng."},
+      {term:"connecting flight",ipa:"/kəˈnek.tɪŋ flaɪt/",pos:"n",meaning:"chuyến bay nối chuyến",ex:"I have a connecting flight in Singapore.",exVi:"Tôi có một chuyến bay nối chuyến ở Singapore."},
+      {term:"fragile",ipa:"/ˈfrædʒ.aɪl/",pos:"adj",meaning:"dễ vỡ",ex:"Please handle this bag with care, it's fragile.",exVi:"Vui lòng cẩn thận với túi này, nó dễ vỡ."},
+      {term:"destination",ipa:"/ˌdes.tɪˈneɪ.ʃən/",pos:"n",meaning:"điểm đến",ex:"What's your final destination today?",exVi:"Điểm đến cuối cùng của bạn hôm nay là gì?"}
+    ],
+    phrases:[
+      {term:"check in",ipa:"/tʃek ɪn/",meaning:"làm thủ tục (ở sân bay/khách sạn)",ex:"We need to check in at least two hours early.",exVi:"Chúng ta cần làm thủ tục ít nhất hai tiếng trước."},
+      {term:"on time",ipa:"/ɒn taɪm/",meaning:"đúng giờ",ex:"Luckily, our flight departed on time.",exVi:"May mắn là chuyến bay của chúng tôi khởi hành đúng giờ."},
+      {term:"window seat",ipa:"/ˈwɪn.doʊ siːt/",meaning:"ghế cạnh cửa sổ",ex:"I'd prefer a window seat if possible.",exVi:"Tôi muốn ghế cạnh cửa sổ nếu có thể."},
+      {term:"carry-on bag",ipa:"/ˈkær.i ɒn bæɡ/",meaning:"hành lý xách tay",ex:"You can only bring one carry-on bag.",exVi:"Bạn chỉ được mang một túi xách tay."},
+      {term:"miss a flight",ipa:"/mɪs ə flaɪt/",meaning:"lỡ chuyến bay",ex:"We almost missed our flight because of traffic.",exVi:"Chúng tôi suýt lỡ chuyến bay vì kẹt xe."},
+      {term:"go through customs",ipa:"/ɡoʊ θruː ˈkʌs.təmz/",meaning:"qua hải quan",ex:"It took a while to go through customs.",exVi:"Mất một lúc để qua hải quan."},
+      {term:"last call",ipa:"/læst kɔːl/",meaning:"thông báo gọi hành khách lần cuối",ex:"This is the last call for passengers on flight VN203.",exVi:"Đây là thông báo cuối cùng cho hành khách chuyến VN203."},
+      {term:"excess baggage",ipa:"/ɪkˈses ˈbæɡ.ɪdʒ/",meaning:"hành lý quá cước",ex:"We had to pay extra for excess baggage.",exVi:"Chúng tôi phải trả thêm phí cho hành lý quá cước."},
+      {term:"duty-free",ipa:"/ˈdjuː.ti friː/",meaning:"miễn thuế",ex:"Let's stop by the duty-free shop before boarding.",exVi:"Hãy ghé qua cửa hàng miễn thuế trước khi lên máy bay."},
+      {term:"round trip",ipa:"/raʊnd trɪp/",meaning:"khứ hồi",ex:"I booked a round trip ticket to Singapore.",exVi:"Tôi đã đặt vé khứ hồi đến Singapore."}
+    ],
+    dialogue:{
+      title:"Tại quầy check-in sân bay quốc tế",
+      lines:[
+        {speaker:"Staff",you:false,en:"Good morning! Can I see your passport, please?",vi:"Chào buổi sáng! Tôi có thể xem hộ chiếu của bạn không?"},
+        {speaker:"You",you:true, en:"Sure, here you go. I have a connecting flight in Singapore.",vi:"Chắc chắn rồi, đây. Tôi có một chuyến bay nối chuyến ở Singapore."},
+        {speaker:"Staff",you:false,en:"Do you have any checked luggage?",vi:"Bạn có hành lý ký gửi không?"},
+        {speaker:"You",you:true, en:"Yes, one bag. And this one is fragile — it has some equipment.",vi:"Có, một túi. Và cái này dễ vỡ — bên trong có thiết bị."},
+        {speaker:"Staff",you:false,en:"No problem. Would you like a window seat or aisle seat?",vi:"Không vấn đề. Bạn muốn ghế cửa sổ hay ghế lối đi?"},
+        {speaker:"You",you:true, en:"A window seat would be great, thanks.",vi:"Ghế cửa sổ thì tuyệt, cảm ơn."},
+        {speaker:"Staff",you:false,en:"Boarding starts at gate 22. Please don't miss the last call.",vi:"Lên máy bay bắt đầu ở cổng 22. Đừng bỏ lỡ thông báo cuối cùng nhé."},
+        {speaker:"You",you:true, en:"Thank you! Is the flight on time today?",vi:"Cảm ơn! Chuyến bay hôm nay có đúng giờ không?"},
+        {speaker:"Staff",you:false,en:"Yes, no delays so far. Have a great trip!",vi:"Có, chưa có trễ nào. Chúc bạn có chuyến đi vui!"}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Boarding\" nghĩa là:",opts:["Hạ cánh","Lên máy bay","Hủy chuyến","Đổi vé"],ans:1},
+      {type:"fill",q:"Điền cụm: \"We need to ___ ___ at least two hours early.\" (làm thủ tục)",ans:"check in"},
+      {type:"mc",q:"\"Delayed\" trái nghĩa với:",opts:["On time","Fragile","Departure","Luggage"],ans:0},
+      {type:"mc",q:"\"Connecting flight\" là:",opts:["Chuyến bay thẳng","Chuyến bay nối chuyến","Chuyến bay bị hủy","Chuyến bay nội địa"],ans:1},
+      {type:"fill",q:"Điền từ: \"What's your final ___ today?\" (điểm đến)",ans:"destination"},
+      {type:"mc",q:"\"Excess baggage\" nghĩa là:",opts:["Hành lý nhẹ","Hành lý quá cước","Hành lý xách tay","Hành lý bị mất"],ans:1},
+      {type:"mc",q:"'Lỡ chuyến bay' trong tiếng Anh là:",opts:["catch a flight","miss a flight","book a flight","delay a flight"],ans:1},
+      {type:"fill",q:"Điền từ: \"Please handle this bag with care, it's ___.\" (dễ vỡ)",ans:"fragile"},
+      {type:"mc",q:"\"Round trip\" nghĩa là:",opts:["Một chiều","Khứ hồi","Nối chuyến","Trễ chuyến"],ans:1},
+      {type:"mc",q:"\"Last call\" được phát khi nào?",opts:["Tại khách sạn khi nhận phòng","Tại sân bay, gọi hành khách lần cuối trước giờ bay","Khi máy bay hạ cánh","Khi qua hải quan"],ans:1}
+    ]
+  },
+  // ── DAY 4 ── Đời sống: Mua sắm & nhà hàng
+  {
+    day:4, theme:"Đời sống", topic:"Mua sắm và đi ăn nhà hàng",
+    words:[
+      {term:"receipt",ipa:"/rɪˈsiːt/",pos:"n",meaning:"hóa đơn, biên lai",ex:"Could I get a receipt for this, please?",exVi:"Tôi có thể xin hóa đơn cho cái này không?"},
+      {term:"refund",ipa:"/ˈriː.fʌnd/",pos:"n/v",meaning:"hoàn tiền",ex:"I'd like to request a refund for this item.",exVi:"Tôi muốn yêu cầu hoàn tiền cho món hàng này."},
+      {term:"discount",ipa:"/ˈdɪs.kaʊnt/",pos:"n",meaning:"giảm giá",ex:"Is there any discount on this jacket?",exVi:"Có giảm giá nào cho cái áo khoác này không?"},
+      {term:"recommend",ipa:"/ˌrek.əˈmend/",pos:"v",meaning:"gợi ý, giới thiệu",ex:"Could you recommend a good dish here?",exVi:"Bạn có thể gợi ý một món ngon ở đây không?"},
+      {term:"reservation",ipa:"/ˌrez.ərˈveɪ.ʃən/",pos:"n",meaning:"đặt chỗ trước",ex:"I'd like to make a reservation for two people.",exVi:"Tôi muốn đặt chỗ cho hai người."},
+      {term:"portion",ipa:"/ˈpɔːr.ʃən/",pos:"n",meaning:"khẩu phần, phần ăn",ex:"The portion size here is quite generous.",exVi:"Khẩu phần ở đây khá hào phóng."},
+      {term:"spicy",ipa:"/ˈspaɪ.si/",pos:"adj",meaning:"cay",ex:"Could you make it less spicy, please?",exVi:"Bạn có thể làm món này bớt cay được không?"},
+      {term:"allergic",ipa:"/əˈlɜːr.dʒɪk/",pos:"adj",meaning:"dị ứng",ex:"I'm allergic to peanuts, so I'll avoid this dish.",exVi:"Tôi bị dị ứng đậu phộng nên sẽ tránh món này."},
+      {term:"bill",ipa:"/bɪl/",pos:"n",meaning:"hóa đơn thanh toán",ex:"Can we get the bill, please?",exVi:"Cho chúng tôi xin hóa đơn được không?"},
+      {term:"exchange",ipa:"/ɪksˈtʃeɪndʒ/",pos:"v",meaning:"đổi (hàng)",ex:"Can I exchange this for a different size?",exVi:"Tôi có thể đổi cái này sang size khác không?"}
+    ],
+    phrases:[
+      {term:"try on",ipa:"/traɪ ɒn/",meaning:"mặc thử, ướm thử",ex:"Can I try this shirt on first?",exVi:"Tôi có thể mặc thử áo này trước không?"},
+      {term:"out of stock",ipa:"/aʊt ʌv stɒk/",meaning:"hết hàng",ex:"Sorry, that color is currently out of stock.",exVi:"Xin lỗi, màu đó hiện đang hết hàng."},
+      {term:"split the bill",ipa:"/splɪt ðə bɪl/",meaning:"chia hóa đơn",ex:"Let's just split the bill evenly.",exVi:"Hãy chia hóa đơn đều ra nhé."},
+      {term:"for here or to go",ipa:"/fɔːr hɪr ɔːr tə ɡoʊ/",meaning:"ăn tại chỗ hay mang về",ex:"Is that for here or to go?",exVi:"Bạn dùng tại chỗ hay mang về?"},
+      {term:"on the house",ipa:"/ɒn ðə haʊs/",meaning:"được mời miễn phí (chủ quán mời)",ex:"This dessert is on the house tonight.",exVi:"Món tráng miệng này được mời miễn phí tối nay."},
+      {term:"a good deal",ipa:"/ə ɡʊd diːl/",meaning:"món hời, giá tốt",ex:"This price is actually a good deal for the quality.",exVi:"Giá này thực ra rất hời so với chất lượng."},
+      {term:"run out of",ipa:"/rʌn aʊt ʌv/",meaning:"hết (cái gì đó)",ex:"I think we've run out of the seafood pasta.",exVi:"Tôi nghĩ chúng tôi đã hết món pasta hải sản rồi."},
+      {term:"what do you recommend",ipa:"/wɒt duː juː ˌrek.əˈmend/",meaning:"bạn gợi ý món gì",ex:"What do you recommend for someone who likes spicy food?",exVi:"Bạn gợi ý món gì cho người thích ăn cay?"},
+      {term:"pay in cash",ipa:"/peɪ ɪn kæʃ/",meaning:"trả bằng tiền mặt",ex:"I'll pay in cash, not by card.",exVi:"Tôi sẽ trả bằng tiền mặt, không quẹt thẻ."},
+      {term:"keep the change",ipa:"/kiːp ðə tʃeɪndʒ/",meaning:"giữ lại tiền thừa",ex:"Here's $20, keep the change.",exVi:"Đây là 20 đô, giữ lại tiền thừa nhé."}
+    ],
+    dialogue:{
+      title:"Đi ăn nhà hàng cuối tuần",
+      lines:[
+        {speaker:"Waiter",you:false,en:"Good evening! Do you have a reservation?",vi:"Chào buổi tối! Bạn có đặt chỗ trước không?"},
+        {speaker:"You",you:true, en:"Yes, under the name Linh, for two people.",vi:"Có, tên Linh, cho hai người."},
+        {speaker:"Waiter",you:false,en:"What do you recommend? I'm allergic to seafood.",vi:"Bạn gợi ý gì? Tôi bị dị ứng hải sản."},
+        {speaker:"You",you:true, en:"I'd suggest the grilled chicken — not spicy and the portion is generous.",vi:"Tôi gợi ý gà nướng — không cay và phần ăn hào phóng."},
+        {speaker:"Waiter",you:false,en:"Should we split the bill or pay separately?",vi:"Chúng ta chia hóa đơn hay trả riêng?"},
+        {speaker:"You",you:true, en:"Let's split the bill evenly. I'll pay in cash.",vi:"Hãy chia đều. Tôi sẽ trả bằng tiền mặt."},
+        {speaker:"Waiter",you:false,en:"And the dessert is on the house tonight!",vi:"Và món tráng miệng tối nay được mời miễn phí!"},
+        {speaker:"You",you:true, en:"Oh, thank you! Keep the change.",vi:"Ồ, cảm ơn! Giữ lại tiền thừa nhé."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Out of stock\" nghĩa là:",opts:["Còn nhiều hàng","Hết hàng","Giảm giá","Hàng mới"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Let's just ___ ___ ___ evenly.\" (chia hóa đơn)",ans:"split the bill"},
+      {type:"mc",q:"\"I'm allergic to peanuts\" nghĩa là:",opts:["Tôi thích đậu phộng","Tôi dị ứng đậu phộng","Tôi ghét đậu phộng","Tôi không biết đậu phộng"],ans:1},
+      {type:"mc",q:"\"On the house\" nghĩa là:",opts:["Ở nhà","Được mời miễn phí","Trong nhà bếp","Đắt tiền"],ans:1},
+      {type:"fill",q:"Điền từ: \"Could you make it less ___?\" (cay)",ans:"spicy"},
+      {type:"mc",q:"Câu hỏi đúng khi hỏi khách ăn tại chỗ hay mang về:",opts:["Is that for here or to go?","Is that here or there?","Is that to eat or not?","Is that fast or slow?"],ans:0},
+      {type:"mc",q:"\"Run out of\" nghĩa là:",opts:["Chạy ra ngoài","Hết (cái gì đó)","Chạy vào trong","Bắt đầu chạy"],ans:1},
+      {type:"fill",q:"Điền từ: \"Can I ___ this for a different size?\" (đổi hàng)",ans:"exchange"},
+      {type:"mc",q:"\"A good deal\" nghĩa là:",opts:["Giao dịch tệ","Món hời, giá tốt","Giá đắt","Hàng giả"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Here's $20, ___ ___ ___.\" (giữ tiền thừa)",ans:"keep the change"}
+    ]
+  },
+  // ── DAY 5 ── Công việc: Email & lịch họp
+  {
+    day:5, theme:"Công việc", topic:"Viết email công việc và sắp xếp lịch họp",
+    words:[
+      {term:"attach",ipa:"/əˈtætʃ/",pos:"v",meaning:"đính kèm",ex:"I've attached the contract for your review.",exVi:"Tôi đã đính kèm hợp đồng để bạn xem xét."},
+      {term:"confirm",ipa:"/kənˈfɜːrm/",pos:"v",meaning:"xác nhận",ex:"Could you confirm the meeting time?",exVi:"Bạn có thể xác nhận giờ họp được không?"},
+      {term:"postpone",ipa:"/poʊˈspoʊn/",pos:"v",meaning:"hoãn lại",ex:"We need to postpone the meeting until next week.",exVi:"Chúng ta cần hoãn cuộc họp đến tuần sau."},
+      {term:"agenda",ipa:"/əˈdʒen.də/",pos:"n",meaning:"chương trình nghị sự",ex:"I'll send the agenda before the call.",exVi:"Tôi sẽ gửi chương trình nghị sự trước cuộc gọi."},
+      {term:"available",ipa:"/əˈveɪ.lə.bəl/",pos:"adj",meaning:"rảnh, có sẵn",ex:"Are you available at 3 PM tomorrow?",exVi:"Bạn có rảnh lúc 3 giờ chiều mai không?"},
+      {term:"remind",ipa:"/rɪˈmaɪnd/",pos:"v",meaning:"nhắc nhở",ex:"Just a quick reminder about our meeting tomorrow.",exVi:"Chỉ là lời nhắc nhanh về cuộc họp ngày mai của chúng ta."},
+      {term:"urgent",ipa:"/ˈɜːr.dʒənt/",pos:"adj",meaning:"khẩn cấp",ex:"This issue is urgent and needs immediate attention.",exVi:"Vấn đề này khẩn cấp và cần được xử lý ngay."},
+      {term:"regarding",ipa:"/rɪˈɡɑːr.dɪŋ/",pos:"prep",meaning:"liên quan đến, về việc",ex:"I'm writing regarding our upcoming renewal.",exVi:"Tôi viết thư này liên quan đến việc gia hạn sắp tới của chúng ta."},
+      {term:"draft",ipa:"/dræft/",pos:"n/v",meaning:"bản nháp; soạn thảo",ex:"I'll send you a draft of the proposal by Friday.",exVi:"Tôi sẽ gửi bạn bản nháp đề xuất trước thứ Sáu."},
+      {term:"follow up",ipa:"/ˈfɒl.oʊ ʌp/",pos:"v",meaning:"theo dõi tiếp, nhắc lại",ex:"I just wanted to follow up on my previous email.",exVi:"Tôi chỉ muốn nhắc lại email trước đó của mình."}
+    ],
+    phrases:[
+      {term:"circle back",ipa:"/ˈsɜːr.kəl bæk/",meaning:"quay lại bàn tiếp (vấn đề)",ex:"Let's circle back on this next week.",exVi:"Hãy quay lại bàn tiếp vấn đề này vào tuần sau."},
+      {term:"touch base",ipa:"/tʌtʃ beɪs/",meaning:"liên hệ trao đổi nhanh",ex:"I just wanted to touch base before the deadline.",exVi:"Tôi chỉ muốn liên hệ trao đổi nhanh trước hạn chót."},
+      {term:"put together",ipa:"/pʊt təˈɡeðər/",meaning:"tổng hợp, chuẩn bị (tài liệu)",ex:"I'll put together a summary of today's call.",exVi:"Tôi sẽ tổng hợp một bản tóm tắt cuộc gọi hôm nay."},
+      {term:"loop in",ipa:"/luːp ɪn/",meaning:"thêm (ai đó) vào trao đổi",ex:"Let me loop in our technical team on this.",exVi:"Để tôi thêm đội kỹ thuật vào trao đổi này."},
+      {term:"as soon as possible",ipa:"/æz suːn æz ˈpɒs.ə.bəl/",meaning:"càng sớm càng tốt (ASAP)",ex:"Please reply as soon as possible.",exVi:"Vui lòng phản hồi càng sớm càng tốt."},
+      {term:"get back to",ipa:"/ɡet bæk tuː/",meaning:"phản hồi lại cho (ai)",ex:"I'll get back to you by end of day.",exVi:"Tôi sẽ phản hồi lại cho bạn trước cuối ngày."},
+      {term:"push back",ipa:"/pʊʃ bæk/",meaning:"dời lại (thời gian họp)",ex:"Can we push back the meeting to 4 PM?",exVi:"Chúng ta có thể dời cuộc họp đến 4 giờ chiều không?"},
+      {term:"on the same page",ipa:"/ɒn ðə seɪm peɪdʒ/",meaning:"cùng hiểu, đồng thuận",ex:"Let's make sure we're on the same page before the call.",exVi:"Hãy đảm bảo chúng ta đồng thuận trước cuộc gọi."},
+      {term:"send over",ipa:"/send ˈoʊ.vər/",meaning:"gửi qua (tài liệu)",ex:"Could you send over the updated contract?",exVi:"Bạn có thể gửi qua hợp đồng đã cập nhật không?"},
+      {term:"set up a call",ipa:"/set ʌp ə kɔːl/",meaning:"sắp xếp một cuộc gọi",ex:"Let's set up a call to discuss the renewal terms.",exVi:"Hãy sắp xếp một cuộc gọi để bàn về điều khoản gia hạn."}
+    ],
+    dialogue:{
+      title:"Trao đổi với khách hàng về lịch họp gia hạn",
+      lines:[
+        {speaker:"You",you:true, en:"Hi John, I'm writing regarding our upcoming renewal. Are you available for a call this week?",vi:"Chào John, tôi viết về việc gia hạn sắp tới của chúng ta. Bạn có rảnh để gọi tuần này không?"},
+        {speaker:"John",you:false,en:"Hi! Can we push back to next Monday? This week is packed.",vi:"Chào! Chúng ta có thể dời đến thứ Hai tuần sau không? Tuần này tôi bận kín lịch."},
+        {speaker:"You",you:true, en:"Sure. I'll send over a draft agenda before then.",vi:"Được thôi. Tôi sẽ gửi qua chương trình nghị sự nháp trước đó."},
+        {speaker:"John",you:false,en:"Perfect. Could you also loop in your technical team?",vi:"Tuyệt. Bạn có thể thêm đội kỹ thuật của bạn vào không?"},
+        {speaker:"You",you:true, en:"Of course. Just to make sure we're on the same page — the goal is to finalize renewal terms, right?",vi:"Tất nhiên. Chỉ để đảm bảo chúng ta đồng thuận — mục tiêu là chốt điều khoản gia hạn, đúng không?"},
+        {speaker:"John",you:false,en:"Exactly. I'll get back to you if anything urgent comes up.",vi:"Chính xác. Tôi sẽ phản hồi lại nếu có gì khẩn cấp phát sinh."},
+        {speaker:"You",you:true, en:"Sounds good. I'll follow up with a calendar invite shortly.",vi:"Nghe hay đấy. Tôi sẽ nhắc lại bằng lời mời lịch sớm nhé."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Push back the meeting\" nghĩa là:",opts:["Hủy cuộc họp","Dời cuộc họp đến giờ trễ hơn","Kết thúc cuộc họp sớm","Bắt đầu sớm hơn"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Let's make sure we're on the same ___.\" (đồng thuận)",ans:"page"},
+      {type:"mc",q:"\"Loop in\" nghĩa là:",opts:["Loại ai đó ra","Thêm ai đó vào trao đổi","Gọi điện cho ai đó","Sa thải ai đó"],ans:1},
+      {type:"fill",q:"Điền từ: \"I'm writing ___ our upcoming renewal.\" (liên quan đến)",ans:"regarding"},
+      {type:"mc",q:"\"Touch base\" nghĩa là:",opts:["Đến căn cứ quân sự","Liên hệ trao đổi nhanh","Chạm vào bàn","Kết thúc dự án"],ans:1},
+      {type:"mc",q:"ASAP là viết tắt của:",opts:["As Slow As Possible","As Soon As Possible","A Simple Agenda Plan","Available Schedule And Plan"],ans:1},
+      {type:"fill",q:"Điền từ: \"This issue is ___ and needs immediate attention.\" (khẩn cấp)",ans:"urgent"},
+      {type:"mc",q:"Câu nào dùng đúng \"follow up\"?",opts:["I want to follow up on my previous email.","I want to follow on up my email.","I want to up follow my email.","I follow up previous my email."],ans:0},
+      {type:"mc",q:"\"Circle back\" nghĩa là:",opts:["Đi vòng tròn","Quay lại bàn tiếp vấn đề sau","Hủy cuộc họp","Gửi email mới"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Let's ___ ___ a call to discuss the renewal terms.\" (sắp xếp cuộc gọi)",ans:"set up"}
+    ]
+  },
+  // ── DAY 6 ── Đời sống: Sức khỏe & thể dục
+  {
+    day:6, theme:"Đời sống", topic:"Sức khỏe, thể dục và cảm giác cơ thể",
+    words:[
+      {term:"energetic",ipa:"/ˌen.ərˈdʒet.ɪk/",pos:"adj",meaning:"tràn đầy năng lượng",ex:"I feel more energetic after morning exercise.",exVi:"Tôi cảm thấy tràn đầy năng lượng hơn sau khi tập thể dục buổi sáng."},
+      {term:"stretch",ipa:"/stretʃ/",pos:"v",meaning:"duỗi, giãn cơ",ex:"Always stretch before you start exercising.",exVi:"Luôn giãn cơ trước khi bắt đầu tập luyện."},
+      {term:"sore",ipa:"/sɔːr/",pos:"adj",meaning:"đau nhức (cơ)",ex:"My legs are sore after yesterday's workout.",exVi:"Chân tôi bị đau nhức sau buổi tập hôm qua."},
+      {term:"diet",ipa:"/ˈdaɪ.ət/",pos:"n",meaning:"chế độ ăn",ex:"I'm trying to follow a healthier diet.",exVi:"Tôi đang cố theo một chế độ ăn lành mạnh hơn."},
+      {term:"injury",ipa:"/ˈɪn.dʒər.i/",pos:"n",meaning:"chấn thương",ex:"He's recovering from a knee injury.",exVi:"Anh ấy đang hồi phục sau chấn thương đầu gối."},
+      {term:"breathe",ipa:"/briːð/",pos:"v",meaning:"thở",ex:"Try to breathe deeply when you feel stressed.",exVi:"Hãy thử thở sâu khi bạn cảm thấy căng thẳng."},
+      {term:"pace",ipa:"/peɪs/",pos:"n",meaning:"nhịp độ, tốc độ",ex:"Start at a slow pace and gradually speed up.",exVi:"Bắt đầu với nhịp độ chậm rồi tăng dần tốc độ."},
+      {term:"flexible",ipa:"/ˈflek.sə.bəl/",pos:"adj",meaning:"linh hoạt, dẻo dai",ex:"Yoga helps make your body more flexible.",exVi:"Yoga giúp cơ thể bạn dẻo dai hơn."},
+      {term:"recover",ipa:"/rɪˈkʌv.ər/",pos:"v",meaning:"hồi phục",ex:"It usually takes a few days to recover from a hard workout.",exVi:"Thường mất vài ngày để hồi phục sau một buổi tập nặng."},
+      {term:"stamina",ipa:"/ˈstæm.ɪ.nə/",pos:"n",meaning:"sức bền",ex:"Running daily is a great way to build stamina.",exVi:"Chạy bộ hằng ngày là cách tuyệt vời để xây dựng sức bền."}
+    ],
+    phrases:[
+      {term:"work out",ipa:"/wɜːk aʊt/",meaning:"tập thể dục",ex:"I try to work out three times a week.",exVi:"Tôi cố gắng tập thể dục ba lần một tuần."},
+      {term:"warm up",ipa:"/wɔːrm ʌp/",meaning:"khởi động",ex:"Don't skip the warm-up before running.",exVi:"Đừng bỏ qua phần khởi động trước khi chạy."},
+      {term:"cool down",ipa:"/kuːl daʊn/",meaning:"thả lỏng (sau khi tập)",ex:"Take five minutes to cool down after the workout.",exVi:"Dành năm phút để thả lỏng sau buổi tập."},
+      {term:"push yourself",ipa:"/pʊʃ jɔːrˈself/",meaning:"cố gắng hết sức, đẩy giới hạn bản thân",ex:"Don't push yourself too hard on your first day.",exVi:"Đừng cố quá sức vào ngày đầu tiên."},
+      {term:"take a break",ipa:"/teɪk ə breɪk/",meaning:"nghỉ giải lao",ex:"Let's take a break for five minutes.",exVi:"Hãy nghỉ giải lao năm phút."},
+      {term:"stay in shape",ipa:"/steɪ ɪn ʃeɪp/",meaning:"giữ dáng, giữ thể trạng tốt",ex:"I exercise regularly to stay in shape.",exVi:"Tôi tập thể dục đều đặn để giữ dáng."},
+      {term:"build up stamina",ipa:"/bɪld ʌp ˈstæm.ɪ.nə/",meaning:"xây dựng sức bền",ex:"Running every day helps build up your stamina.",exVi:"Chạy bộ mỗi ngày giúp xây dựng sức bền."},
+      {term:"feel under the weather",ipa:"/fiːl ˌʌn.dər ðə ˈweð.ər/",meaning:"cảm thấy hơi mệt/ốm",ex:"I'm feeling a bit under the weather today.",exVi:"Hôm nay tôi cảm thấy hơi mệt trong người."},
+      {term:"get back into shape",ipa:"/ɡet bæk ˈɪn.tuː ʃeɪp/",meaning:"lấy lại vóc dáng/thể lực",ex:"After the holidays, I need to get back into shape.",exVi:"Sau kỳ nghỉ, tôi cần lấy lại vóc dáng."},
+      {term:"listen to your body",ipa:"/ˈlɪs.ən tə jɔːr ˈbɒd.i/",meaning:"lắng nghe cơ thể mình",ex:"If it hurts, stop. Always listen to your body.",exVi:"Nếu đau, hãy dừng lại. Luôn lắng nghe cơ thể mình."}
+    ],
+    dialogue:{
+      title:"Trò chuyện với bạn tập gym",
+      lines:[
+        {speaker:"Tom",you:false,en:"Are you still sore from yesterday's workout?",vi:"Bạn còn đau nhức từ buổi tập hôm qua không?"},
+        {speaker:"You",you:true, en:"Yeah, my legs are really sore. I think I pushed myself too hard.",vi:"Ừ, chân tôi thực sự đau nhức. Tôi nghĩ tôi đã cố quá sức."},
+        {speaker:"Tom",you:false,en:"Always warm up and don't skip the cool down.",vi:"Luôn khởi động và đừng bỏ qua phần thả lỏng."},
+        {speaker:"You",you:true, en:"I want to build up stamina, but I also need to listen to my body.",vi:"Tôi muốn xây dựng sức bền, nhưng tôi cũng cần lắng nghe cơ thể mình."},
+        {speaker:"Tom",you:false,en:"How's your diet going?",vi:"Chế độ ăn của bạn thế nào rồi?"},
+        {speaker:"You",you:true, en:"I feel more energetic since I started eating healthier.",vi:"Tôi cảm thấy tràn đầy năng lượng hơn từ khi bắt đầu ăn lành mạnh hơn."},
+        {speaker:"Tom",you:false,en:"Want to work out together tomorrow? Let's keep a slow pace.",vi:"Muốn tập cùng nhau ngày mai không? Chúng ta giữ nhịp chậm thôi."},
+        {speaker:"You",you:true, en:"Sure, as long as we take a break if I feel under the weather.",vi:"Được, miễn là chúng ta nghỉ giải lao nếu tôi cảm thấy không khỏe."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Sore\" nghĩa là:",opts:["Vui vẻ","Đau nhức (cơ)","Mạnh mẽ","Lười biếng"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Don't skip the ___ ___ before running.\" (khởi động)",ans:"warm up"},
+      {type:"mc",q:"\"Cool down\" nghĩa là:",opts:["Làm nóng người","Thả lỏng sau khi tập","Uống nước lạnh","Tắt máy lạnh"],ans:1},
+      {type:"mc",q:"\"Feel under the weather\" nghĩa là:",opts:["Cảm thấy rất khỏe","Cảm thấy hơi mệt/ốm","Thích thời tiết","Bị ướt mưa"],ans:1},
+      {type:"fill",q:"Điền từ: \"Yoga helps make your body more ___.\" (dẻo dai)",ans:"flexible"},
+      {type:"mc",q:"\"Stay in shape\" nghĩa là:",opts:["Vẽ hình","Giữ dáng/thể trạng tốt","Đi mua sắm","Ở trong nhà"],ans:1},
+      {type:"fill",q:"Điền cụm (4 từ): \"Always ___ ___ ___ ___.\" (lắng nghe cơ thể)",ans:"listen to your body"},
+      {type:"mc",q:"Từ nào nghĩa là 'hồi phục'?",opts:["injury","recover","stretch","pace"],ans:1},
+      {type:"mc",q:"\"Push yourself too hard\" nghĩa là:",opts:["Đẩy người khác","Cố quá sức bản thân","Nghỉ ngơi nhiều","Từ bỏ"],ans:1},
+      {type:"fill",q:"Điền từ: \"After the holidays, I need to get back ___ shape.\"",ans:"into"}
+    ]
+  },
+  // ── DAY 7 ── Công việc: Demo sản phẩm
+  {
+    day:7, theme:"Công việc", topic:"Trình bày sản phẩm và demo cho khách hàng",
+    words:[
+      {term:"feature",ipa:"/ˈfiː.tʃər/",pos:"n",meaning:"tính năng",ex:"This feature allows you to automate renewals.",exVi:"Tính năng này cho phép bạn tự động hóa việc gia hạn."},
+      {term:"benefit",ipa:"/ˈben.ɪ.fɪt/",pos:"n",meaning:"lợi ích",ex:"The main benefit is saving time on manual tasks.",exVi:"Lợi ích chính là tiết kiệm thời gian cho các tác vụ thủ công."},
+      {term:"demonstrate",ipa:"/ˈdem.ən.streɪt/",pos:"v",meaning:"trình diễn, minh họa",ex:"Let me demonstrate how the dashboard works.",exVi:"Để tôi trình diễn cách bảng điều khiển hoạt động."},
+      {term:"interface",ipa:"/ˈɪn.tər.feɪs/",pos:"n",meaning:"giao diện",ex:"The new interface is much easier to navigate.",exVi:"Giao diện mới dễ điều hướng hơn nhiều."},
+      {term:"customize",ipa:"/ˈkʌs.tə.maɪz/",pos:"v",meaning:"tùy chỉnh",ex:"You can customize the report to fit your needs.",exVi:"Bạn có thể tùy chỉnh báo cáo theo nhu cầu của mình."},
+      {term:"upgrade",ipa:"/ˈʌp.ɡreɪd/",pos:"n/v",meaning:"nâng cấp",ex:"We recommend upgrading to the premium plan.",exVi:"Chúng tôi khuyên bạn nên nâng cấp lên gói premium."},
+      {term:"integrate",ipa:"/ˈɪn.tɪ.ɡreɪt/",pos:"v",meaning:"tích hợp",ex:"This software can integrate with your existing tools.",exVi:"Phần mềm này có thể tích hợp với các công cụ hiện có của bạn."},
+      {term:"efficient",ipa:"/ɪˈfɪʃ.ənt/",pos:"adj",meaning:"hiệu quả",ex:"This process is much more efficient than before.",exVi:"Quy trình này hiệu quả hơn nhiều so với trước đây."},
+      {term:"concern",ipa:"/kənˈsɜːrn/",pos:"n",meaning:"mối lo ngại",ex:"Do you have any concerns about the pricing?",exVi:"Bạn có lo ngại gì về giá cả không?"},
+      {term:"value",ipa:"/ˈvæl.juː/",pos:"n",meaning:"giá trị",ex:"We want to make sure you get real value from this product.",exVi:"Chúng tôi muốn đảm bảo bạn nhận được giá trị thật sự từ sản phẩm này."}
+    ],
+    phrases:[
+      {term:"walk through",ipa:"/wɔːk θruː/",meaning:"hướng dẫn từng bước, trình bày chi tiết",ex:"Let me walk you through the main features.",exVi:"Để tôi hướng dẫn bạn từng bước các tính năng chính."},
+      {term:"in a nutshell",ipa:"/ɪn ə ˈnʌt.ʃel/",meaning:"tóm lại, nói ngắn gọn",ex:"In a nutshell, this tool saves you hours every week.",exVi:"Tóm lại, công cụ này giúp bạn tiết kiệm hàng giờ mỗi tuần."},
+      {term:"take a look at",ipa:"/teɪk ə lʊk æt/",meaning:"xem qua, nhìn vào",ex:"Let's take a look at the dashboard together.",exVi:"Hãy cùng xem qua bảng điều khiển nhé."},
+      {term:"stand out",ipa:"/stænd aʊt/",meaning:"nổi bật",ex:"What really stands out is the automation feature.",exVi:"Điều thực sự nổi bật là tính năng tự động hóa."},
+      {term:"address a concern",ipa:"/əˈdres ə kənˈsɜːrn/",meaning:"giải quyết một mối lo ngại",ex:"I'd like to address your concern about data security.",exVi:"Tôi muốn giải quyết mối lo ngại của bạn về bảo mật dữ liệu."},
+      {term:"tailored to",ipa:"/ˈteɪ.lərd tuː/",meaning:"được thiết kế riêng cho",ex:"This plan is tailored to your company's needs.",exVi:"Gói này được thiết kế riêng cho nhu cầu công ty bạn."},
+      {term:"get the most out of",ipa:"/ɡet ðə moʊst aʊt ʌv/",meaning:"tận dụng tối đa",ex:"Here's how to get the most out of this feature.",exVi:"Đây là cách để tận dụng tối đa tính năng này."},
+      {term:"make sense",ipa:"/meɪk sens/",meaning:"hợp lý, dễ hiểu",ex:"Does this pricing structure make sense to you?",exVi:"Cơ cấu giá này có hợp lý với bạn không?"},
+      {term:"at your fingertips",ipa:"/æt jɔːr ˈfɪŋ.ɡər.tɪps/",meaning:"trong tầm tay, dễ dàng truy cập",ex:"All your data is right at your fingertips.",exVi:"Tất cả dữ liệu của bạn đều nằm trong tầm tay."},
+      {term:"any questions so far",ipa:"/ˈen.i ˈkwes.tʃənz soʊ fɑːr/",meaning:"có câu hỏi gì cho đến giờ không",ex:"Any questions so far before I move to the next slide?",exVi:"Có câu hỏi gì cho đến giờ trước khi tôi sang slide tiếp theo không?"}
+    ],
+    dialogue:{
+      title:"Demo sản phẩm cho khách hàng tiềm năng",
+      lines:[
+        {speaker:"You",you:true, en:"Thanks for joining. Let me walk you through the main features of our platform.",vi:"Cảm ơn đã tham gia. Để tôi hướng dẫn bạn từng bước các tính năng chính của nền tảng."},
+        {speaker:"Client",you:false,en:"What really makes this different from other tools?",vi:"Điều gì thực sự làm nó khác với các công cụ khác?"},
+        {speaker:"You",you:true, en:"In a nutshell, what stands out is how easily it can integrate with your existing systems.",vi:"Tóm lại, điều nổi bật là nó có thể tích hợp dễ dàng với các hệ thống hiện có của bạn."},
+        {speaker:"Client",you:false,en:"Can we take a look at the dashboard?",vi:"Chúng ta có thể xem qua bảng điều khiển không?"},
+        {speaker:"You",you:true, en:"Of course. You can customize each report — everything is at your fingertips.",vi:"Tất nhiên. Bạn có thể tùy chỉnh từng báo cáo — tất cả đều trong tầm tay."},
+        {speaker:"Client",you:false,en:"I have a concern about the learning curve for my team.",vi:"Tôi có lo ngại về việc nhóm tôi cần thời gian để làm quen."},
+        {speaker:"You",you:true, en:"That's a fair concern. We provide onboarding tailored to your team, so it shouldn't take long.",vi:"Đó là lo ngại hợp lý. Chúng tôi cung cấp đào tạo được thiết kế riêng cho đội bạn, nên sẽ không mất nhiều thời gian."},
+        {speaker:"Client",you:false,en:"Okay, that makes sense. Any questions so far?",vi:"Được, nghe hợp lý. Có câu hỏi gì cho đến giờ không?"}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Walk you through\" nghĩa là:",opts:["Đi dạo cùng bạn","Hướng dẫn từng bước","Bỏ qua bạn","Từ chối bạn"],ans:1},
+      {type:"fill",q:"Điền cụm: \"In a ___, this tool saves you hours every week.\" (tóm lại)",ans:"nutshell"},
+      {type:"mc",q:"\"Stand out\" nghĩa là:",opts:["Đứng yên","Nổi bật","Ngồi xuống","Biến mất"],ans:1},
+      {type:"mc",q:"\"Tailored to\" nghĩa là:",opts:["Được may đo","Được thiết kế riêng cho","Bị từ chối bởi","Giống hệt"],ans:1},
+      {type:"fill",q:"Điền từ: \"This software can ___ with your existing tools.\" (tích hợp)",ans:"integrate"},
+      {type:"mc",q:"\"At your fingertips\" nghĩa là:",opts:["Ở đầu ngón tay thật sự","Trong tầm tay, dễ truy cập","Bị mất","Cần nhiều bước để lấy"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Does this pricing structure make ___ to you?\" (hợp lý)",ans:"sense"},
+      {type:"mc",q:"Từ nào nghĩa là 'tùy chỉnh'?",opts:["customize","demonstrate","integrate","upgrade"],ans:0},
+      {type:"mc",q:"\"Address a concern\" nghĩa là:",opts:["Gửi địa chỉ","Giải quyết mối lo ngại","Phớt lờ vấn đề","Tạo ra lo ngại mới"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Here's how to get the ___ out of this feature.\" (tận dụng tối đa)",ans:"most"}
+    ]
+  },
+  // ── DAY 8 ── Du lịch: Khách sạn
+  {
+    day:8, theme:"Du lịch", topic:"Nhận phòng khách sạn và yêu cầu dịch vụ",
+    words:[
+      {term:"accommodation",ipa:"/əˌkɒm.əˈdeɪ.ʃən/",pos:"n",meaning:"chỗ ở, nơi lưu trú",ex:"The company will cover your accommodation during the trip.",exVi:"Công ty sẽ chi trả chỗ ở của bạn trong chuyến đi."},
+      {term:"amenities",ipa:"/əˈmiː.nə.tiz/",pos:"n",meaning:"tiện nghi",ex:"The hotel offers great amenities like a pool and gym.",exVi:"Khách sạn có tiện nghi tốt như hồ bơi và phòng gym."},
+      {term:"vacant",ipa:"/ˈveɪ.kənt/",pos:"adj",meaning:"trống, còn chỗ",ex:"Is there a vacant room for tonight?",exVi:"Có phòng trống cho tối nay không?"},
+      {term:"complimentary",ipa:"/ˌkɒm.plɪˈmen.tər.i/",pos:"adj",meaning:"miễn phí (đi kèm dịch vụ)",ex:"Breakfast is complimentary for all guests.",exVi:"Bữa sáng miễn phí cho tất cả khách."},
+      {term:"housekeeping",ipa:"/ˈhaʊsˌkiː.pɪŋ/",pos:"n",meaning:"dịch vụ dọn phòng",ex:"Could you send housekeeping to my room?",exVi:"Bạn có thể gửi nhân viên dọn phòng đến phòng tôi không?"},
+      {term:"noisy",ipa:"/ˈnɔɪ.zi/",pos:"adj",meaning:"ồn ào",ex:"The room next to the elevator can be noisy.",exVi:"Phòng cạnh thang máy có thể ồn ào."},
+      {term:"extend",ipa:"/ɪkˈstend/",pos:"v",meaning:"gia hạn, kéo dài",ex:"I'd like to extend my stay by one more night.",exVi:"Tôi muốn gia hạn thêm một đêm nữa."},
+      {term:"deposit",ipa:"/dɪˈpɒz.ɪt/",pos:"n",meaning:"tiền đặt cọc",ex:"A deposit is required at check-in.",exVi:"Cần đặt cọc khi nhận phòng."},
+      {term:"view",ipa:"/vjuː/",pos:"n",meaning:"tầm nhìn, cảnh quan",ex:"We requested a room with a sea view.",exVi:"Chúng tôi đã yêu cầu phòng có tầm nhìn ra biển."},
+      {term:"upgrade",ipa:"/ˈʌp.ɡreɪd/",pos:"n",meaning:"nâng cấp (phòng)",ex:"Could I get a free upgrade to a suite?",exVi:"Tôi có thể được nâng cấp miễn phí lên phòng suite không?"}
+    ],
+    phrases:[
+      {term:"check out",ipa:"/tʃek aʊt/",meaning:"trả phòng",ex:"What time do we need to check out?",exVi:"Mấy giờ chúng ta cần trả phòng?"},
+      {term:"front desk",ipa:"/frʌnt desk/",meaning:"quầy lễ tân",ex:"You can leave your key at the front desk.",exVi:"Bạn có thể để chìa khóa ở quầy lễ tân."},
+      {term:"wake-up call",ipa:"/ˈweɪk ʌp kɔːl/",meaning:"cuộc gọi báo thức",ex:"Could I request a wake-up call at 6 AM?",exVi:"Tôi có thể yêu cầu cuộc gọi báo thức lúc 6 giờ sáng không?"},
+      {term:"out of order",ipa:"/aʊt ʌv ˈɔːr.dər/",meaning:"hỏng, không hoạt động",ex:"The elevator on this floor is out of order.",exVi:"Thang máy ở tầng này đang bị hỏng."},
+      {term:"late check-out",ipa:"/leɪt tʃek aʊt/",meaning:"trả phòng muộn",ex:"Is it possible to get a late check-out?",exVi:"Có thể trả phòng muộn được không?"},
+      {term:"fully booked",ipa:"/ˈfʊl.i bʊkt/",meaning:"đã hết phòng, kín chỗ",ex:"I'm sorry, we're fully booked this weekend.",exVi:"Xin lỗi, chúng tôi đã hết phòng cuối tuần này."},
+      {term:"settle the bill",ipa:"/ˈset.əl ðə bɪl/",meaning:"thanh toán hóa đơn",ex:"Would you like to settle the bill now or at check-out?",exVi:"Bạn muốn thanh toán bây giờ hay lúc trả phòng?"},
+      {term:"room service",ipa:"/ruːm ˈsɜːr.vɪs/",meaning:"dịch vụ phục vụ tại phòng",ex:"Let's just order room service tonight.",exVi:"Tối nay mình cứ gọi dịch vụ phục vụ phòng đi."},
+      {term:"double-check",ipa:"/ˈdʌb.əl tʃek/",meaning:"kiểm tra lại lần nữa",ex:"Let me double-check the reservation details.",exVi:"Để tôi kiểm tra lại chi tiết đặt phòng."},
+      {term:"make a complaint",ipa:"/meɪk ə kəmˈpleɪnt/",meaning:"khiếu nại",ex:"I'd like to make a complaint about the noise.",exVi:"Tôi muốn khiếu nại về tiếng ồn."}
+    ],
+    dialogue:{
+      title:"Nhận phòng và xử lý vấn đề tại khách sạn công tác",
+      lines:[
+        {speaker:"You",you:true, en:"Hi, I have a reservation under the name Hoàng, checking in for three nights.",vi:"Chào, tôi có đặt phòng tên Hoàng, nhận phòng ba đêm."},
+        {speaker:"Front desk",you:false,en:"Let me double-check that. Could I get a deposit and your passport?",vi:"Để tôi kiểm tra lại. Tôi có thể xin tiền đặt cọc và hộ chiếu của bạn không?"},
+        {speaker:"You",you:true, en:"Sure. Is breakfast complimentary?",vi:"Được. Bữa sáng có miễn phí không?"},
+        {speaker:"Front desk",you:false,en:"Yes, it's included. Your room has a city view.",vi:"Có, đã bao gồm. Phòng của bạn có tầm nhìn thành phố."},
+        {speaker:"You",you:true, en:"Is there a vacant room that's less noisy? My last room was too loud.",vi:"Có phòng trống nào ít ồn ào hơn không? Phòng lần trước của tôi quá ồn."},
+        {speaker:"Front desk",you:false,en:"We can offer a free upgrade to a higher floor.",vi:"Chúng tôi có thể nâng cấp miễn phí lên tầng cao hơn."},
+        {speaker:"You",you:true, en:"Perfect. Could I also request a wake-up call at 6 AM and a late check-out on my last day?",vi:"Tuyệt. Tôi cũng có thể yêu cầu gọi báo thức lúc 6 giờ sáng và trả phòng muộn ngày cuối không?"},
+        {speaker:"Front desk",you:false,en:"Of course. We'll settle the bill at check-out.",vi:"Tất nhiên. Chúng ta sẽ thanh toán lúc trả phòng."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Fully booked\" nghĩa là:",opts:["Còn nhiều phòng trống","Đã hết phòng","Phòng đang sửa chữa","Phòng miễn phí"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Could I get a ___ ___ ___ at 6 AM?\" (cuộc gọi báo thức)",ans:"wake-up call"},
+      {type:"mc",q:"\"Complimentary\" nghĩa là:",opts:["Đắt tiền","Miễn phí kèm theo","Phải trả thêm","Bị hủy"],ans:1},
+      {type:"mc",q:"\"Out of order\" nghĩa là:",opts:["Đang hoạt động tốt","Hỏng, không hoạt động","Trật tự","Mới tinh"],ans:1},
+      {type:"fill",q:"Điền từ: \"You can leave your key at the front ___.\" (quầy lễ tân)",ans:"desk"},
+      {type:"mc",q:"\"Late check-out\" nghĩa là:",opts:["Nhận phòng muộn","Trả phòng muộn","Hủy phòng","Đổi phòng"],ans:1},
+      {type:"fill",q:"Điền cụm: \"I'd like to ___ ___ ___ about the noise.\" (khiếu nại)",ans:"make a complaint"},
+      {type:"mc",q:"Từ nào nghĩa là 'tiện nghi'?",opts:["amenities","deposit","vacant","housekeeping"],ans:0},
+      {type:"mc",q:"\"Settle the bill\" nghĩa là:",opts:["Xé hóa đơn","Thanh toán hóa đơn","In hóa đơn","Từ chối hóa đơn"],ans:1},
+      {type:"fill",q:"Điền từ: \"I'd like to ___ my stay by one more night.\" (gia hạn)",ans:"extend"}
+    ]
+  },
+  // ── DAY 9 ── Đời sống: Cảm xúc & giao tiếp xã giao
+  {
+    day:9, theme:"Đời sống", topic:"Diễn đạt cảm xúc và giao tiếp xã giao",
+    words:[
+      {term:"overwhelmed",ipa:"/ˌoʊ.vərˈwelmd/",pos:"adj",meaning:"quá tải, choáng ngợp",ex:"I felt overwhelmed with all the new information.",exVi:"Tôi cảm thấy quá tải với tất cả thông tin mới."},
+      {term:"relieved",ipa:"/rɪˈliːvd/",pos:"adj",meaning:"nhẹ nhõm",ex:"I was relieved when the deadline got extended.",exVi:"Tôi thấy nhẹ nhõm khi hạn chót được gia hạn."},
+      {term:"frustrated",ipa:"/ˈfrʌs.treɪ.tɪd/",pos:"adj",meaning:"bực bội, thất vọng",ex:"She was frustrated by the slow internet connection.",exVi:"Cô ấy bực bội vì kết nối internet chậm."},
+      {term:"grateful",ipa:"/ˈɡreɪt.fəl/",pos:"adj",meaning:"biết ơn",ex:"I'm really grateful for your help today.",exVi:"Tôi thực sự biết ơn sự giúp đỡ của bạn hôm nay."},
+      {term:"nervous",ipa:"/ˈnɜːr.vəs/",pos:"adj",meaning:"lo lắng, hồi hộp",ex:"I always get nervous before presentations.",exVi:"Tôi luôn lo lắng trước khi thuyết trình."},
+      {term:"confident",ipa:"/ˈkɒn.fɪ.dənt/",pos:"adj",meaning:"tự tin",ex:"I feel more confident speaking English now.",exVi:"Bây giờ tôi cảm thấy tự tin hơn khi nói tiếng Anh."},
+      {term:"polite",ipa:"/pəˈlaɪt/",pos:"adj",meaning:"lịch sự",ex:"It's important to stay polite, even when you disagree.",exVi:"Quan trọng là phải giữ lịch sự, ngay cả khi bạn không đồng ý."},
+      {term:"apologize",ipa:"/əˈpɒl.ə.dʒaɪz/",pos:"v",meaning:"xin lỗi",ex:"I'd like to apologize for the delay.",exVi:"Tôi muốn xin lỗi vì sự chậm trễ."},
+      {term:"compliment",ipa:"/ˈkɒm.plɪ.mənt/",pos:"n/v",meaning:"lời khen; khen ngợi",ex:"Thank you for the compliment, that means a lot.",exVi:"Cảm ơn lời khen, điều đó có ý nghĩa rất lớn."},
+      {term:"embarrassed",ipa:"/ɪmˈbær.əst/",pos:"adj",meaning:"xấu hổ, ngại ngùng",ex:"I felt embarrassed when I mispronounced his name.",exVi:"Tôi cảm thấy xấu hổ khi phát âm sai tên anh ấy."}
+    ],
+    phrases:[
+      {term:"no worries",ipa:"/noʊ ˈwʌr.iz/",meaning:"không sao đâu",ex:"No worries, it happens to everyone.",exVi:"Không sao đâu, chuyện này xảy ra với ai cũng vậy."},
+      {term:"it means a lot",ipa:"/ɪt miːnz ə lɒt/",meaning:"điều đó có ý nghĩa rất lớn",ex:"Thank you for coming, it really means a lot to me.",exVi:"Cảm ơn bạn đã đến, điều đó thật sự có ý nghĩa với tôi."},
+      {term:"take it easy",ipa:"/teɪk ɪt ˈiː.zi/",meaning:"thư giãn, đừng quá căng thẳng",ex:"Take it easy, we still have time.",exVi:"Thư giãn đi, chúng ta vẫn còn thời gian."},
+      {term:"calm down",ipa:"/kɑːm daʊn/",meaning:"bình tĩnh lại",ex:"Let's calm down and talk about this properly.",exVi:"Hãy bình tĩnh lại và bàn chuyện này một cách đàng hoàng."},
+      {term:"cheer up",ipa:"/tʃɪr ʌp/",meaning:"vui lên",ex:"Cheer up, things will get better soon.",exVi:"Vui lên nào, mọi thứ sẽ tốt hơn thôi."},
+      {term:"make yourself at home",ipa:"/meɪk jɔːrˈself æt hoʊm/",meaning:"cứ tự nhiên như ở nhà",ex:"Please, make yourself at home.",exVi:"Mời bạn cứ tự nhiên như ở nhà."},
+      {term:"I appreciate it",ipa:"/aɪ əˈpriː.ʃi.eɪt ɪt/",meaning:"tôi rất trân trọng/cảm kích",ex:"Thanks for your patience, I really appreciate it.",exVi:"Cảm ơn sự kiên nhẫn của bạn, tôi thực sự rất trân trọng."},
+      {term:"it's not a big deal",ipa:"/ɪts nɒt ə bɪɡ diːl/",meaning:"chuyện không lớn đâu",ex:"Don't worry, it's not a big deal.",exVi:"Đừng lo, chuyện không lớn đâu."},
+      {term:"I owe you one",ipa:"/aɪ oʊ juː wʌn/",meaning:"tôi nợ bạn một ơn",ex:"Thanks for covering my shift — I owe you one.",exVi:"Cảm ơn vì đã trực thay tôi — tôi nợ bạn một ơn đấy."},
+      {term:"between you and me",ipa:"/bɪˈtwiːn juː ænd miː/",meaning:"giữa chúng ta thôi (nói riêng tư)",ex:"Between you and me, I think the plan needs changes.",exVi:"Giữa chúng ta thôi nhé, tôi nghĩ kế hoạch cần thay đổi."}
+    ],
+    dialogue:{
+      title:"Trò chuyện với bạn sau một ngày căng thẳng",
+      lines:[
+        {speaker:"An",you:false,en:"You look a bit overwhelmed. Everything okay?",vi:"Trông bạn có vẻ quá tải đấy. Mọi thứ ổn không?"},
+        {speaker:"You",you:true, en:"I'm just frustrated — I made a mistake in front of the whole team today.",vi:"Tôi chỉ đang bực bội — tôi đã mắc lỗi trước cả đội hôm nay."},
+        {speaker:"An",you:false,en:"Take it easy, it's not a big deal. We all make mistakes.",vi:"Thư giãn đi, chuyện không lớn đâu. Ai cũng mắc lỗi cả."},
+        {speaker:"You",you:true, en:"I felt so embarrassed. I had to apologize right away.",vi:"Tôi cảm thấy rất xấu hổ. Tôi phải xin lỗi ngay lập tức."},
+        {speaker:"An",you:false,en:"No worries. It shows you're responsible.",vi:"Không sao đâu. Điều đó cho thấy bạn có trách nhiệm."},
+        {speaker:"You",you:true, en:"I was really nervous about how my manager would react.",vi:"Tôi thực sự lo lắng về phản ứng của sếp tôi."},
+        {speaker:"An",you:false,en:"And how did it go?",vi:"Và diễn ra như thế nào?"},
+        {speaker:"You",you:true, en:"Actually, I was relieved — she gave me a compliment for fixing it so fast.",vi:"Thực ra tôi thấy nhẹ nhõm — cô ấy khen tôi vì đã sửa nhanh như vậy."},
+        {speaker:"An",you:false,en:"See? Cheer up! Between you and me, everyone respects how you handled it.",vi:"Thấy chưa? Vui lên! Giữa chúng ta thôi nhé, mọi người đều nể cách bạn xử lý."},
+        {speaker:"You",you:true, en:"Thanks, An. I appreciate it. I owe you one for listening.",vi:"Cảm ơn An. Tôi trân trọng điều đó. Tôi nợ bạn một ơn vì đã lắng nghe."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Overwhelmed\" nghĩa là:",opts:["Rất vui","Quá tải, choáng ngợp","Rất khỏe","Rất tự tin"],ans:1},
+      {type:"fill",q:"Điền cụm: \"___ ___, it happens to everyone.\" (không sao đâu)",ans:"No worries"},
+      {type:"mc",q:"\"Relieved\" nghĩa là:",opts:["Lo lắng","Nhẹ nhõm","Tức giận","Buồn bã"],ans:1},
+      {type:"mc",q:"\"It's not a big deal\" nghĩa là:",opts:["Đó là thương vụ lớn","Chuyện không lớn đâu","Đó là vấn đề nghiêm trọng","Tôi không quan tâm"],ans:1},
+      {type:"fill",q:"Điền từ: \"I'd like to ___ for the delay.\" (xin lỗi)",ans:"apologize"},
+      {type:"mc",q:"\"I owe you one\" nghĩa là:",opts:["Tôi nợ bạn tiền","Tôi nợ bạn một ơn","Tôi có một cái","Tôi sở hữu bạn"],ans:1},
+      {type:"fill",q:"Điền cụm: \"___ you and me, I think the plan needs changes.\" (giữa chúng ta thôi)",ans:"Between"},
+      {type:"mc",q:"Từ nào nghĩa là 'xấu hổ, ngại ngùng'?",opts:["confident","embarrassed","grateful","polite"],ans:1},
+      {type:"mc",q:"\"Cheer up\" dùng để:",opts:["An ủi ai đó buồn, bảo họ vui lên","Chúc mừng sinh nhật","Yêu cầu im lặng","Tạm biệt ai đó"],ans:0},
+      {type:"fill",q:"Điền cụm: \"Thanks for your patience, I really ___ it.\" (trân trọng)",ans:"appreciate"}
+    ]
+  },
+  // ── DAY 10 ── Công việc: Đàm phán gia hạn (Ôn tập tuần 1)
+  {
+    day:10, theme:"Công việc", topic:"Đàm phán gia hạn hợp đồng — Ôn tập tuần 1",
+    words:[
+      {term:"objection",ipa:"/əbˈdʒek.ʃən/",pos:"n",meaning:"sự phản đối, ý kiến phản bác",ex:"Let's address your objection about the price increase.",exVi:"Hãy cùng giải quyết phản đối của bạn về việc tăng giá."},
+      {term:"negotiate",ipa:"/nɪˈɡoʊ.ʃi.eɪt/",pos:"v",meaning:"đàm phán",ex:"We're happy to negotiate the contract terms.",exVi:"Chúng tôi rất sẵn lòng đàm phán các điều khoản hợp đồng."},
+      {term:"budget",ipa:"/ˈbʌdʒ.ɪt/",pos:"n",meaning:"ngân sách",ex:"Unfortunately, this is outside our budget this year.",exVi:"Tiếc là điều này vượt ngân sách của chúng tôi năm nay."},
+      {term:"justify",ipa:"/ˈdʒʌs.tɪ.faɪ/",pos:"v",meaning:"biện minh, giải thích hợp lý",ex:"Can you justify the price increase for this renewal?",exVi:"Bạn có thể giải thích hợp lý cho việc tăng giá gia hạn này không?"},
+      {term:"commitment",ipa:"/kəˈmɪt.mənt/",pos:"n",meaning:"cam kết",ex:"We need a long-term commitment from both sides.",exVi:"Chúng ta cần một cam kết dài hạn từ cả hai phía."},
+      {term:"competitor",ipa:"/kəmˈpet.ɪ.tər/",pos:"n",meaning:"đối thủ cạnh tranh",ex:"Your competitor offers a lower price than you.",exVi:"Đối thủ cạnh tranh của bạn đưa ra giá thấp hơn."},
+      {term:"hesitant",ipa:"/ˈhez.ɪ.tənt/",pos:"adj",meaning:"do dự, ngần ngại",ex:"I understand you're hesitant about committing right now.",exVi:"Tôi hiểu bạn đang do dự về việc cam kết ngay bây giờ."},
+      {term:"guarantee",ipa:"/ˌɡær.ənˈtiː/",pos:"n/v",meaning:"sự đảm bảo; đảm bảo",ex:"We guarantee a response within 24 hours.",exVi:"Chúng tôi đảm bảo phản hồi trong vòng 24 giờ."},
+      {term:"terminate",ipa:"/ˈtɜːr.mɪ.neɪt/",pos:"v",meaning:"chấm dứt (hợp đồng)",ex:"They decided to terminate the contract early.",exVi:"Họ quyết định chấm dứt hợp đồng sớm."},
+      {term:"proposal",ipa:"/prəˈpoʊ.zəl/",pos:"n",meaning:"đề xuất",ex:"We put together a new proposal that fits your budget.",exVi:"Chúng tôi đã chuẩn bị một đề xuất mới phù hợp với ngân sách của bạn."}
+    ],
+    phrases:[
+      {term:"weigh the options",ipa:"/weɪ ðiː ˈɒp.ʃənz/",meaning:"cân nhắc các lựa chọn",ex:"Take your time to weigh the options before deciding.",exVi:"Hãy dành thời gian cân nhắc các lựa chọn trước khi quyết định."},
+      {term:"meet in the middle",ipa:"/miːt ɪn ðə ˈmɪd.əl/",meaning:"thỏa hiệp, gặp nhau ở giữa",ex:"Let's try to meet in the middle on the pricing.",exVi:"Hãy cố gắng thỏa hiệp về giá cả."},
+      {term:"see eye to eye",ipa:"/siː aɪ tə aɪ/",meaning:"đồng quan điểm",ex:"We don't see eye to eye on the contract length.",exVi:"Chúng tôi không cùng quan điểm về thời hạn hợp đồng."},
+      {term:"on board",ipa:"/ɒn bɔːrd/",meaning:"đồng ý tham gia, ủng hộ",ex:"Once the finance team is on board, we can move forward.",exVi:"Khi đội tài chính đồng ý, chúng ta có thể tiến tới."},
+      {term:"think it over",ipa:"/θɪŋk ɪt ˈoʊ.vər/",meaning:"suy nghĩ kỹ về việc gì",ex:"Take some time to think it over and let me know.",exVi:"Hãy dành thời gian suy nghĩ kỹ rồi cho tôi biết."},
+      {term:"bear in mind",ipa:"/ber ɪn maɪnd/",meaning:"ghi nhớ, lưu ý",ex:"Please bear in mind that the offer expires this week.",exVi:"Xin lưu ý rằng ưu đãi này hết hạn vào tuần này."},
+      {term:"sign off on",ipa:"/saɪn ɒf ɒn/",meaning:"phê duyệt, ký xác nhận",ex:"We just need our director to sign off on this.",exVi:"Chúng tôi chỉ cần giám đốc phê duyệt việc này."},
+      {term:"come to an agreement",ipa:"/kʌm tuː ən əˈɡriː.mənt/",meaning:"đi đến thỏa thuận",ex:"I'm confident we can come to an agreement today.",exVi:"Tôi tin chúng ta có thể đi đến thỏa thuận hôm nay."},
+      {term:"at the end of the day",ipa:"/æt ðiː end ʌv ðə deɪ/",meaning:"suy cho cùng, cuối cùng thì",ex:"At the end of the day, both sides want this to work.",exVi:"Suy cho cùng, cả hai bên đều muốn việc này thành công."},
+      {term:"win-win situation",ipa:"/wɪn wɪn ˌsɪtʃ.uˈeɪ.ʃən/",meaning:"tình huống đôi bên cùng có lợi",ex:"I believe this proposal creates a win-win situation.",exVi:"Tôi tin đề xuất này tạo ra tình huống đôi bên cùng có lợi."}
+    ],
+    dialogue:{
+      title:"Đàm phán gia hạn hợp đồng với khách hàng do dự về giá",
+      lines:[
+        {speaker:"Client",you:false,en:"Honestly, your competitor is offering a lower price for a similar product.",vi:"Thật ra, đối thủ của bạn đang đưa ra giá thấp hơn cho sản phẩm tương tự."},
+        {speaker:"You",you:true, en:"I understand your concern. Is it mainly about budget?",vi:"Tôi hiểu lo ngại của bạn. Chủ yếu là về ngân sách phải không?"},
+        {speaker:"Client",you:false,en:"Yes, it's outside our budget. We're hesitant to renew at this price.",vi:"Đúng vậy, điều này vượt ngân sách của chúng tôi. Chúng tôi do dự khi gia hạn với giá này."},
+        {speaker:"You",you:true, en:"I hear you. We can be flexible — let's meet in the middle on payment terms.",vi:"Tôi hiểu bạn. Chúng tôi có thể linh hoạt — hãy thỏa hiệp về điều khoản thanh toán."},
+        {speaker:"Client",you:false,en:"What do you mean exactly?",vi:"Ý bạn cụ thể là gì?"},
+        {speaker:"You",you:true, en:"We could offer quarterly payments and guarantee priority support for six months.",vi:"Chúng tôi có thể thanh toán theo quý và đảm bảo hỗ trợ ưu tiên trong sáu tháng."},
+        {speaker:"Client",you:false,en:"Interesting. Let me think it over.",vi:"Thú vị đấy. Để tôi suy nghĩ thêm."},
+        {speaker:"You",you:true, en:"Of course. Bear in mind the offer is valid until Friday.",vi:"Tất nhiên. Lưu ý rằng ưu đãi này có giá trị đến thứ Sáu."},
+        {speaker:"Client",you:false,en:"Understood. If our director signs off on it, we should come to an agreement soon.",vi:"Hiểu rồi. Nếu giám đốc chúng tôi phê duyệt, chúng ta sẽ sớm đi đến thỏa thuận."},
+        {speaker:"You",you:true, en:"At the end of the day, I want this to be a win-win situation for both of us.",vi:"Suy cho cùng, tôi muốn đây là tình huống đôi bên cùng có lợi."}
+      ]
+    },
+    test:[
+      {type:"mc",q:"\"Meet in the middle\" nghĩa là:",opts:["Gặp nhau ở văn phòng","Thỏa hiệp","Hủy cuộc gặp","Đến muộn"],ans:1},
+      {type:"fill",q:"Điền cụm: \"I believe this proposal creates a ___-___ situation.\" (đôi bên cùng có lợi)",ans:"win-win"},
+      {type:"mc",q:"\"Hesitant\" nghĩa là:",opts:["Tự tin","Do dự, ngần ngại","Vui mừng","Tức giận"],ans:1},
+      {type:"mc",q:"\"Sign off on\" nghĩa là:",opts:["Ký nghỉ việc","Phê duyệt, ký xác nhận","Từ chối","Hủy hợp đồng"],ans:1},
+      {type:"fill",q:"Điền từ: \"Can you ___ the price increase for this renewal?\" (biện minh)",ans:"justify"},
+      {type:"mc",q:"\"At the end of the day\" nghĩa là:",opts:["Vào cuối ngày làm việc","Suy cho cùng, cuối cùng thì","Vào buổi tối","Trước khi đi ngủ"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Take some time to think it ___ and let me know.\" (suy nghĩ kỹ)",ans:"over"},
+      {type:"mc",q:"Từ nào nghĩa là 'đối thủ cạnh tranh'?",opts:["commitment","competitor","objection","guarantee"],ans:1},
+      {type:"mc",q:"\"We don't see eye to eye\" nghĩa là:",opts:["Chúng tôi đồng quan điểm","Chúng tôi không cùng quan điểm","Chúng tôi không nhìn thấy nhau","Chúng tôi cùng cận thị"],ans:1},
+      {type:"fill",q:"Điền cụm: \"Once the finance team is ___ ___, we can move forward.\" (đồng ý tham gia)",ans:"on board"}
+    ]
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+const State = {
+  userId: null,
+  userName: null,
+  progress: {
+    completedDays: {},   // { "1": {completedAt, score, skipped} }
+    srsCards: {},        // { "day-1": {box, dueDate, lastReview} }
+    streak: 0,
+    lastActiveDate: null,
+    testResults: {}      // { "1": {score, total, pct, date} }
+  },
+  currentDay: 1,
+  speechVoices: []
+};
+
+const LS_KEY      = "vocab100_progress_v1";
+const LS_USER_KEY = "vocab100_user_v1";
+
+// SafeStorage: đảm bảo app không crash khi mở qua file://
+const SafeStorage = (function(){
+  let mem = {}, useMem = false;
+  try {
+    const k = "__vocab100_test__";
+    localStorage.setItem(k,"1"); localStorage.removeItem(k);
+  } catch(e){ useMem = true; }
+  return {
+    getItem(k){ if(useMem) return mem[k]??null; try{ return localStorage.getItem(k); }catch(e){ useMem=true; return mem[k]??null; } },
+    setItem(k,v){ if(useMem){ mem[k]=v; return; } try{ localStorage.setItem(k,v); }catch(e){ useMem=true; mem[k]=v; } }
+  };
+})();
+
+function todayStr(d = new Date()){ return d.toISOString().slice(0,10); }
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+
+// ============================================================
+// LOCAL + FIREBASE PERSISTENCE
+// ============================================================
+function saveLocal(){ SafeStorage.setItem(LS_KEY, JSON.stringify(State.progress)); }
+function loadLocal(){
+  try { const r = SafeStorage.getItem(LS_KEY); if(r) State.progress = {...State.progress,...JSON.parse(r)}; } catch(e){}
+}
+function userRef(){ return ref(db, `users/${State.userId}/vocab_progress`); }
+
+async function pushToFirebase(){
+  if(!firebaseReady||!State.userId){ saveLocal(); return; }
+  try{ await set(userRef(), State.progress); saveLocal(); }
+  catch(e){ console.warn("Firebase write failed, saved locally.",e); saveLocal(); }
+}
+async function pullFromFirebase(){
+  if(!firebaseReady||!State.userId) return false;
+  try{
+    const snap = await get(userRef());
+    if(snap.exists()){
+      const r = snap.val();
+      State.progress = {
+        completedDays: r.completedDays||{},
+        srsCards: r.srsCards||{},
+        streak: r.streak||0,
+        lastActiveDate: r.lastActiveDate||null,
+        testResults: r.testResults||{}
+      };
+      return true;
+    }
+  } catch(e){ console.warn("Firebase read failed.",e); }
+  return false;
+}
+function listenFirebaseLive(){
+  if(!firebaseReady||!State.userId) return;
+  onValue(userRef(), snap => {
+    if(snap.exists()){
+      const r = snap.val();
+      State.progress = {
+        completedDays: r.completedDays||{},
+        srsCards: r.srsCards||{},
+        streak: r.streak||0,
+        lastActiveDate: r.lastActiveDate||null,
+        testResults: r.testResults||{}
+      };
+      renderAll();
+    }
+  });
+}
+
+// ============================================================
+// STREAK
+// ============================================================
+function touchStreak(){
+  const today = todayStr(), last = State.progress.lastActiveDate;
+  if(last===today) return;
+  if(!last) State.progress.streak = 1;
+  else { const g = daysBetween(last,today); State.progress.streak = (g===1) ? State.progress.streak+1 : 1; }
+  State.progress.lastActiveDate = today;
+}
+
+// ============================================================
+// SRS (Leitner 5 hộp)  — đơn vị: 1 ngày học
+// ============================================================
+const SRS_INTERVALS = {1:1,2:3,3:7,4:14,5:30};
+function addToSRS(dayNum){
+  const key = `day-${dayNum}`;
+  if(State.progress.srsCards[key]) return;
+  const due = new Date(); due.setDate(due.getDate()+SRS_INTERVALS[1]);
+  State.progress.srsCards[key] = {box:1, dueDate:todayStr(due), lastReview:todayStr()};
+}
+function reviewSRSCard(dayNum, wasCorrect){
+  const key = `day-${dayNum}`, card = State.progress.srsCards[key];
+  if(!card) return;
+  let nb = wasCorrect ? Math.min(card.box+1,5) : 1;
+  const due = new Date(); due.setDate(due.getDate()+SRS_INTERVALS[nb]);
+  card.box=nb; card.dueDate=todayStr(due); card.lastReview=todayStr();
+  pushToFirebase();
+}
+function getDueSRSCards(){
+  const today = todayStr();
+  return Object.entries(State.progress.srsCards)
+    .filter(([,v])=>v.dueDate<=today)
+    .map(([k,v])=>({dayNum:parseInt(k.replace("day-","")), ...v}));
+}
+
+// ============================================================
+// SPEECH
+// ============================================================
+function loadVoices(){ State.speechVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
+if(window.speechSynthesis){ window.speechSynthesis.onvoiceschanged=loadVoices; loadVoices(); }
+function speak(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const v = State.speechVoices.find(v=>/en-US|en_US/.test(v.lang)) || State.speechVoices.find(v=>v.lang.startsWith("en"));
+  if(v) u.voice=v;
+  u.lang="en-US"; u.rate=0.92;
+  window.speechSynthesis.speak(u);
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function getDay(d){ return ALL_DAYS.find(x=>x.day===d); }
+function isDone(d){ return !!State.progress.completedDays[d]; }
+function getNextDay(){
+  for(let d=1;d<=100;d++){ if(!isDone(d) && getDay(d)) return d; }
+  return ALL_DAYS.length||1;
+}
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function norm(s){ return String(s).toLowerCase().trim().replace(/\s+/g," ").replace(/[.,!?]/g,""); }
+function themeClass(t){ return t==="Công việc"?"work":t==="Du lịch"?"travel":"life"; }
+function themeEmoji(t){ return t==="Công việc"?"💼":t==="Du lịch"?"✈️":"🌿"; }
+
+// ============================================================
+// RENDER: Hero + day rail
+// ============================================================
+function renderHero(){
+  const done = Object.keys(State.progress.completedDays).length;
+  const pct  = Math.round((done/100)*100);
+  document.getElementById("currentDayNum").textContent = State.currentDay;
+  document.getElementById("progressFill").style.width  = pct+"%";
+  document.getElementById("progressPct").textContent   = pct+"% hoàn thành";
+  document.getElementById("progressDoneCount").textContent = `${done}/100 ngày`;
+  document.getElementById("streakCount").textContent   = State.progress.streak||0;
+  const day = getDay(State.currentDay);
+  document.getElementById("heroMeta").textContent = day ? `${themeEmoji(day.theme)} ${day.topic}` : "Nội dung đang được bổ sung";
+
+  const rail = document.getElementById("dayRail");
+  rail.innerHTML = "";
+  const unlock = getNextDay();
+  for(let d=1;d<=100;d++){
+    const chip = document.createElement("div");
+    const ld   = getDay(d);
+    let cls = "day-chip";
+    if(isDone(d)) cls += " done";
+    else if(d===State.currentDay) cls += " today";
+    else if(d>unlock||!ld) cls += " locked";
+    chip.className = cls;
+    chip.textContent = d;
+    if(ld) chip.setAttribute("data-theme", ld.theme||"");
+    if(ld && (isDone(d)||d<=unlock)){
+      chip.onclick = ()=>{ State.currentDay=d; renderAll(); window.scrollTo({top:0,behavior:"smooth"}); };
+    }
+    rail.appendChild(chip);
+  }
+}
+
+// ============================================================
+// RENDER: Due review banner
+// ============================================================
+function renderDueReviewBanner(){
+  const due = getDueSRSCards(), el = document.getElementById("dueReviewBanner");
+  if(!due.length){ el.innerHTML=""; return; }
+  el.innerHTML = `<div class="skip-bar" style="cursor:pointer;" id="goReviewBanner">
+    <span>🔄 Bạn có <b>${due.length}</b> ngày từ vựng cần ôn lại hôm nay</span>
+    <button class="btn btn-teal btn-sm">Ôn ngay</button></div>`;
+  document.getElementById("goReviewBanner").onclick = ()=>switchView("review");
+}
+
+// ============================================================
+// RENDER: Lesson — tabs (Từ vựng / Cụm từ / Hội thoại / Test)
+// ============================================================
+let _activeTab = "words";
+let _checkedWords   = {};   // { dayNum: Set of indices }
+let _checkedPhrases = {};
+
+function getChecked(type, dayNum){
+  return (type==="words" ? _checkedWords : _checkedPhrases)[dayNum] || new Set();
+}
+function setChecked(type, dayNum, set){
+  if(type==="words") _checkedWords[dayNum] = set;
+  else _checkedPhrases[dayNum] = set;
+}
+
+function renderLesson(){
+  const container = document.getElementById("lessonContainer");
+  const day = getDay(State.currentDay);
+  if(!day){
+    container.innerHTML = `<div class="card"><div class="empty-state"><div class="ti">🚧</div>
+      <div>Nội dung ngày ${State.currentDay} đang được biên soạn.<br>Quay lại sau nhé!</div></div></div>`;
+    return;
+  }
+  const done = isDone(State.currentDay);
+  const tc = themeClass(day.theme), te = themeEmoji(day.theme);
+
+  let tabContent = "";
+  const cw = getChecked("words", State.currentDay);
+  const cp = getChecked("phrases", State.currentDay);
+  const totalChecked = cw.size + cp.size;
+
+  if(_activeTab==="words"){
+    tabContent = `<div class="vocab-list">${day.words.map((w,i)=>`
+      <div class="vocab-item ${cw.has(i)?"checked":""}" id="vw-${i}">
+        <div class="vocab-item-top">
+          <div>
+            <span class="vocab-term">${esc(w.term)}</span>
+            ${w.pos?`<span class="vocab-pos">${esc(w.pos)}</span>`:""}
+          </div>
+          <button class="speak-btn" onclick="speak('${esc(w.term)}')">🔊</button>
+        </div>
+        <div class="vocab-ipa">${esc(w.ipa)}</div>
+        <div class="vocab-meaning">${esc(w.meaning)}</div>
+        <div class="vocab-example-en">"${esc(w.ex)}"</div>
+        <div class="vocab-example-vi">${esc(w.exVi)}</div>
+        <div class="vocab-actions">
+          <button class="check-btn ${cw.has(i)?"done":""}" onclick="toggleCheck('words',${i})">
+            ${cw.has(i)?"✓ Đã nhớ":"Đánh dấu đã nhớ"}
+          </button>
+          <button class="speak-btn" onclick="speak('${esc(w.ex)}')">🔊</button>
+        </div>
+      </div>`).join("")}</div>`;
+  } else if(_activeTab==="phrases"){
+    tabContent = `<div class="vocab-list">${day.phrases.map((p,i)=>`
+      <div class="vocab-item ${cp.has(i)?"checked":""}" id="vp-${i}">
+        <div class="vocab-item-top">
+          <div><span class="vocab-term">${esc(p.term)}</span></div>
+          <button class="speak-btn" onclick="speak('${esc(p.term)}')">🔊</button>
+        </div>
+        <div class="vocab-ipa">${esc(p.ipa)}</div>
+        <div class="vocab-meaning">${esc(p.meaning)}</div>
+        <div class="vocab-example-en">"${esc(p.ex)}"</div>
+        <div class="vocab-example-vi">${esc(p.exVi)}</div>
+        <div class="vocab-actions">
+          <button class="check-btn ${cp.has(i)?"done":""}" onclick="toggleCheck('phrases',${i})">
+            ${cp.has(i)?"✓ Đã nhớ":"Đánh dấu đã nhớ"}
+          </button>
+          <button class="speak-btn" onclick="speak('${esc(p.ex)}')">🔊</button>
+        </div>
+      </div>`).join("")}</div>`;
+  } else if(_activeTab==="dialogue"){
+    const d2 = day.dialogue;
+    tabContent = `<div class="card" style="margin-bottom:0">
+      <div class="section-label"><span class="num">💬</span>${esc(d2.title)}</div>
+      <div style="margin-bottom:12px;">
+        <button class="btn btn-teal btn-sm" onclick="playDialogueAll()">▶ Nghe cả đoạn</button>
+      </div>
+      <div class="dialogue-box">${d2.lines.map((l,i)=>`
+        <div class="dialogue-line ${l.you?"you":""}">
+          <div class="dialogue-avatar">${esc(l.speaker.slice(0,2).toUpperCase())}</div>
+          <div class="dialogue-bubble">
+            <div class="dialogue-speaker">${esc(l.speaker)}</div>
+            <div class="dialogue-en">${esc(l.en)}</div>
+            <div class="dialogue-vi">${esc(l.vi)}</div>
+          </div>
+          <button class="dialogue-speak" onclick="speak('${esc(l.en)}')">🔊</button>
+        </div>`).join("")}
+      </div>
+    </div>`;
+  } else if(_activeTab==="test"){
+    tabContent = renderTestTab(day);
+  }
+
+  // checklist progress bar
+  const checkPct = Math.round((totalChecked/20)*100);
+  const allChecked = totalChecked===20;
+
+  container.innerHTML = `
+    <div class="card card-today">
+      <div class="lesson-eyebrow">Ngày ${day.day} / 100</div>
+      <div class="lesson-title">${esc(day.topic)}</div>
+      <span class="theme-tag ${tc}">${te} ${esc(day.theme)}</span>
+
+      ${!done ? `
+      <div class="checklist-bar">
+        <div class="checklist-bar-track"><div class="checklist-bar-fill" style="width:${checkPct}%"></div></div>
+        <span class="checklist-bar-label">${totalChecked}/20 đã nhớ</span>
+      </div>` : ""}
+
+      <div class="lesson-tabs">
+        ${[["words","📝 Từ vựng"],["phrases","💡 Cụm từ"],["dialogue","💬 Hội thoại"],["test","✅ Kiểm tra"]].map(([id,label])=>
+          `<button class="lesson-tab ${_activeTab===id?"active":""}" onclick="switchTab('${id}')">${label}</button>`
+        ).join("")}
+      </div>
+
+      ${tabContent}
+
+      ${_activeTab!=="test" && !done ? `
+      <div style="margin-top:18px;">
+        <button class="btn btn-rust btn-block" ${allChecked?"":"disabled"} onclick="switchTab('test')" style="margin-bottom:8px;">
+          ${allChecked ? "🎯 Vào làm bài kiểm tra" : `Đánh dấu đủ 20/20 để làm bài kiểm tra (${totalChecked}/20)`}
+        </button>
+        <button class="btn btn-ghost btn-block btn-sm" onclick="skipDay()">Bỏ qua ngày này →</button>
+      </div>` : ""}
+
+      ${done ? `
+      <div style="margin-top:14px;padding:12px 16px;background:rgba(45,106,106,.1);border-radius:10px;text-align:center;font-size:13px;color:var(--teal);font-weight:600;">
+        ✓ Đã hoàn thành — Điểm test: ${State.progress.testResults[State.currentDay]?.score||"—"}/${State.progress.testResults[State.currentDay]?.total||10}
+        <br><button class="btn btn-ghost btn-sm" style="margin-top:8px;" onclick="goNextDay()">Ngày tiếp theo →</button>
+      </div>` : ""}
+    </div>`;
+}
+
+// ── Test tab ──
+let _testState = {};   // per-day: {answers:{}, submitted:false}
+function getTS(d){ if(!_testState[d]) _testState[d]={answers:{},submitted:false}; return _testState[d]; }
+
+function renderTestTab(day){
+  const d = day.day, ts = getTS(d);
+  if(ts.submitted) return renderTestResult(day, ts);
+
+  const qs = day.test;
+  return `<div id="test-form">
+    ${qs.map((q,i)=>{
+      const a = ts.answers[i];
+      if(q.type==="mc") return `<div class="ex-item">
+        <div class="ex-q">${i+1}. ${esc(q.q)}</div>
+        <div class="opt-grid">${q.opts.map((o,oi)=>`
+          <button class="opt-btn ${a===oi?"selected":""}" onclick="selectOpt(${i},${oi})">${esc(o)}</button>`).join("")}
+        </div></div>`;
+      return `<div class="ex-item">
+        <div class="ex-q">${i+1}. ${esc(q.q)}</div>
+        <input class="ex-input" type="text" placeholder="Nhập câu trả lời..." value="${esc(a||"")}"
+          oninput="updateFill(${i},this.value)">
+      </div>`;
+    }).join("")}
+    <button class="btn btn-teal btn-block" id="submitTestBtn"
+      ${Object.keys(ts.answers).length===qs.length?"":"disabled"}
+      onclick="submitTest(${d})">Nộp bài (${Object.keys(ts.answers).length}/${qs.length})</button>
+  </div>`;
+}
+
+function renderTestResult(day, ts){
+  const qs = day.test;
+  let correct = 0;
+  qs.forEach((q,i)=>{
+    const a = ts.answers[i];
+    if(q.type==="mc"){ if(a===q.ans) correct++; }
+    else { if(a && norm(a)===norm(q.ans)) correct++; }
+  });
+  const pct = Math.round((correct/qs.length)*100);
+  const pass = pct>=80;
+  return `<div class="result-card">
+    <div class="result-emoji">${pass?"🎉":"💪"}</div>
+    <div class="result-score">${correct}/${qs.length}</div>
+    <div class="result-label">${pct}% — ${pass?"Đạt! Bạn có thể qua ngày tiếp theo.":"Cần ≥80% để qua. Ôn lại và thử lại nhé!"}</div>
+  </div>
+  <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
+    ${qs.map((q,i)=>{
+      const a=ts.answers[i], ok=q.type==="mc"?a===q.ans:a&&norm(a)===norm(q.ans);
+      return `<div style="font-size:12.5px;padding:8px 12px;border-radius:8px;background:${ok?"rgba(92,122,94,.12)":"rgba(181,81,47,.1)"}">
+        ${ok?"✓":"✗"} ${esc(q.q)}${!ok?` <span style="color:var(--teal);font-weight:600;">→ ${esc(q.ans)}</span>`:""}
+      </div>`;
+    }).join("")}
+  </div>
+  <div style="display:flex;gap:8px;margin-top:14px;">
+    <button class="btn btn-ghost" style="flex:1" onclick="retryTest(${day.day})">Làm lại</button>
+    ${pass?`<button class="btn btn-teal" style="flex:1" onclick="completeDay(${day.day},${correct},${qs.length})">Hoàn thành ngày ${day.day} →</button>`:""}
+  </div>`;
+}
+
+function selectOpt(qi, oi){
+  const ts = getTS(State.currentDay);
+  ts.answers[qi] = oi;
+  const btn = document.getElementById("submitTestBtn");
+  if(btn){ const day=getDay(State.currentDay); btn.disabled=Object.keys(ts.answers).length<day.test.length; }
+  // re-render opt buttons only
+  document.querySelectorAll(`#test-form .ex-item`)[qi]?.querySelectorAll(".opt-btn").forEach((b,i)=>{
+    b.className="opt-btn"+(i===oi?" selected":"");
+  });
+}
+function updateFill(qi, val){
+  const ts = getTS(State.currentDay);
+  ts.answers[qi] = val;
+  const day=getDay(State.currentDay);
+  const btn=document.getElementById("submitTestBtn");
+  const filled = day.test.filter((q,i)=>q.type==="fill"?!!(ts.answers[i]||"").trim():ts.answers[i]!==undefined).length;
+  if(btn) btn.disabled = filled < day.test.length;
+}
+function submitTest(dayNum){
+  const ts=getTS(dayNum); ts.submitted=true;
+  renderLesson();
+}
+function retryTest(dayNum){
+  _testState[dayNum]={answers:{},submitted:false};
+  renderLesson();
+}
+function completeDay(dayNum, score, total){
+  touchStreak();
+  State.progress.completedDays[dayNum] = {completedAt:todayStr(),score,total};
+  State.progress.testResults[dayNum]   = {score,total,pct:Math.round((score/total)*100),date:todayStr()};
+  addToSRS(dayNum);
+  pushToFirebase();
+  State.currentDay = getNextDay();
+  _activeTab = "words";
+  renderAll();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function skipDay(){
+  touchStreak();
+  State.progress.completedDays[State.currentDay] = {completedAt:todayStr(),skipped:true};
+  addToSRS(State.currentDay);
+  pushToFirebase();
+  State.currentDay = getNextDay();
+  _activeTab="words";
+  renderAll();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function goNextDay(){
+  State.currentDay = Math.min(getNextDay(), 100);
+  _activeTab="words"; renderAll(); window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function toggleCheck(type, idx){
+  const d=State.currentDay, s=new Set(getChecked(type,d));
+  if(s.has(idx)) s.delete(idx); else s.add(idx);
+  setChecked(type,d,s);
+  renderLesson();
+}
+function switchTab(tab){ _activeTab=tab; renderLesson(); }
+function playDialogueAll(){
+  const day=getDay(State.currentDay); if(!day) return;
+  let i=0;
+  const next=()=>{ if(i>=day.dialogue.lines.length) return; const u=new SpeechSynthesisUtterance(day.dialogue.lines[i].en); u.lang="en-US"; u.rate=0.92; u.onend=()=>{i++;next();}; window.speechSynthesis.speak(u); };
+  window.speechSynthesis.cancel(); next();
+}
+
+// ============================================================
+// RENDER: Review (SRS)
+// ============================================================
+function renderReviewView(){
+  const due=getDueSRSCards(), el=document.getElementById("reviewContainer");
+  if(!due.length){
+    el.innerHTML=`<div class="card"><div class="empty-state"><div class="ti">🎉</div>Tuyệt! Không có từ vựng nào cần ôn lại hôm nay.<br><small>Hãy tiếp tục học ngày mới.</small></div></div>`;
+    return;
+  }
+  let html="";
+  due.slice(0,5).forEach(card=>{
+    const d=getDay(card.dayNum); if(!d) return;
+    html+=`<div class="card" id="srs-${card.dayNum}">
+      <div class="lesson-eyebrow">Ôn tập SRS — Ngày ${card.dayNum}</div>
+      <div class="lesson-title" style="font-size:17px;">${esc(d.topic)}</div>
+      <span class="theme-tag ${themeClass(d.theme)}">${themeEmoji(d.theme)} ${esc(d.theme)}</span>
+      <div style="margin:14px 0 8px;font-size:13px;color:var(--ink-soft);">Nhớ lại một số từ/cụm từ tiêu biểu của ngày này:</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+        ${[...d.words.slice(0,3),...d.phrases.slice(0,2)].map(w=>`
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;">
+            <button class="speak-btn" onclick="speak('${esc(w.term)}')">🔊</button>
+            <span style="font-weight:600;color:var(--navy-deep);">${esc(w.term)}</span>
+            <span style="color:var(--ink-soft);font-size:13px;">— ${esc(w.meaning)}</span>
+          </div>`).join("")}
+      </div>
+      <div style="font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:10px;">Bạn có nhớ nghĩa và cách dùng của những từ này không?</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost" style="flex:1" onclick="reviewSRSCard(${card.dayNum},false);this.closest('.card').remove()">😕 Cần ôn thêm</button>
+        <button class="btn btn-teal" style="flex:1" onclick="reviewSRSCard(${card.dayNum},true);this.closest('.card').remove()">✓ Đã nhớ</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+// ============================================================
+// RENDER: Stats
+// ============================================================
+function renderStatsView(){
+  const done=Object.keys(State.progress.completedDays).length;
+  const srs=Object.keys(State.progress.srsCards).length;
+  const mastered=Object.values(State.progress.srsCards).filter(c=>c.box>=5).length;
+  const totalWords = done*20; // 10 từ + 10 cụm/ngày
+  document.getElementById("statGrid").innerHTML=`
+    <div class="stat-box"><div class="stat-num">${done}</div><div class="stat-label">Ngày hoàn thành</div></div>
+    <div class="stat-box"><div class="stat-num">${State.progress.streak||0}</div><div class="stat-label">Streak hiện tại</div></div>
+    <div class="stat-box"><div class="stat-num">${totalWords}</div><div class="stat-label">Từ/cụm đã học</div></div>
+    <div class="stat-box"><div class="stat-num">${mastered}</div><div class="stat-label">Ngày đã thuộc lòng</div></div>`;
+
+  const tests=Object.entries(State.progress.testResults);
+  document.getElementById("testHistory").innerHTML=!tests.length
+    ?`<div class="empty-state"><div class="ti">📝</div>Chưa có bài kiểm tra nào.</div>`
+    :tests.sort((a,b)=>parseInt(a)-parseInt(b)).map(([d,r])=>`
+      <div class="srs-item">
+        <div><div class="srs-title">Ngày ${d} · ${getDay(parseInt(d))?.topic||""}</div><div class="srs-due">${r.date}</div></div>
+        <div style="font-weight:700;color:var(--teal);">${r.score}/${r.total} (${r.pct}%)</div>
+      </div>`).join("");
+
+  const allCards=Object.entries(State.progress.srsCards);
+  document.getElementById("srsAllList").innerHTML=!allCards.length
+    ?`<div class="empty-state"><div class="ti">📚</div>Chưa có thẻ nào.</div>`
+    :allCards.sort((a,b)=>a[1].dueDate.localeCompare(b[1].dueDate)).map(([k,c])=>{
+      const dn=parseInt(k.replace("day-","")), d=getDay(dn);
+      return `<div class="srs-item">
+        <div><div class="srs-title">Ngày ${dn} · ${d?esc(d.topic):""}</div><div class="srs-due">Ôn tiếp: ${c.dueDate}</div></div>
+        <div class="box-dot">${[1,2,3,4,5].map(n=>`<span class="${n<=c.box?"fill":""}"></span>`).join("")}</div>
+      </div>`;}).join("");
+}
+
+// ============================================================
+// VIEW SWITCHING + RENDER ALL
+// ============================================================
+function switchView(view){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById(`view-${view}`).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view));
+  if(view==="review") renderReviewView();
+  if(view==="stats")  renderStatsView();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll(".tab-btn").forEach(btn=>{ btn.onclick=()=>switchView(btn.dataset.view); });
+function renderAll(){ renderHero(); renderDueReviewBanner(); renderLesson(); }
+
+// ============================================================
+// INIT / SETUP MODAL
+// ============================================================
+async function initUser(name){
+  State.userName = name;
+  State.userId   = name.toLowerCase().trim().replace(/[^a-z0-9]/g,"_")||"user_"+Date.now();
+  SafeStorage.setItem(LS_USER_KEY, JSON.stringify({name:State.userName,id:State.userId}));
+  loadLocal();
+  try{
+    firebaseReady = await setupFirebase();
+    if(firebaseReady){ await pullFromFirebase(); listenFirebaseLive(); }
+  } catch(e){ console.warn("Firebase lỗi, dùng localStorage.",e); firebaseReady=false; }
+  State.currentDay = getNextDay();
+  document.getElementById("setupModal").classList.add("hidden");
+  renderAll();
+}
+document.getElementById("setupStartBtn").onclick=()=>{
+  const v=document.getElementById("userNameInput").value.trim();
+  if(!v){ document.getElementById("userNameInput").focus(); return; }
+  initUser(v).catch(e=>console.error(e));
+};
+document.getElementById("userNameInput").addEventListener("keydown",e=>{ if(e.key==="Enter") document.getElementById("setupStartBtn").click(); });
+
+(function boot(){
+  try{
+    const saved=SafeStorage.getItem(LS_USER_KEY);
+    if(saved){ const {name}=JSON.parse(saved); if(name){ initUser(name).catch(()=>document.getElementById("setupModal").classList.remove("hidden")); return; } }
+  } catch(e){}
+  document.getElementById("setupModal").classList.remove("hidden");
+})();
+</script>
+</body>
+</html>
