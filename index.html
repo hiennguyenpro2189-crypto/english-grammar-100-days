@@ -1334,12 +1334,24 @@ function checkAnswer(userVal, answer, type) {
 
 function finishLesson(lesson,exScore,quizScore){
   if(!isDayCompleted(lesson.day)){
-    State.progress.completedDays[lesson.day]={completedAt:todayStr(),exerciseScore:exScore+'%',quizScore:quizScore+'%'};
+    State.progress.completedDays[lesson.day]={
+      completedAt:todayStr(),
+      exerciseScore:exScore+'%',
+      quizScore:quizScore+'%'
+    };
     addToSRS(lesson.day);
     touchStreak();
     pushToFirebase();
   }
-  setTimeout(()=>renderAll(),600);
+  // Chỉ cập nhật hero (streak, progress bar, day rail) — KHÔNG renderLesson()
+  // để tránh xóa mất bảng kết quả quiz vừa hiển thị
+  setTimeout(()=>{
+    renderHero();
+    renderDueReviewBanner();
+    // Cập nhật nút "Ngày tiếp" thành có thể bấm được
+    const nextBtn=document.getElementById('nextDayBtn');
+    if(nextBtn) nextBtn.disabled=false;
+  }, 400);
 }
 
 // ============================================================
