@@ -156,6 +156,23 @@ body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-fo
 .box-dot span.fill{background:var(--sage);}
 .empty-state{text-align:center;padding:40px 16px;color:var(--ink-soft);}
 .empty-state .ti{font-size:34px;margin-bottom:10px;}
+
+/* Quiz result summary */
+.quiz-result-box{margin-top:14px;}
+.quiz-score-header{padding:13px 16px;border-radius:10px;font-size:14px;line-height:1.5;margin-bottom:10px;}
+.quiz-score-header.ok{background:rgba(92,122,94,.14);color:#2f4730;border:1px solid rgba(92,122,94,.3);}
+.quiz-score-header.bad{background:rgba(181,81,47,.08);color:#7a3520;border:1px solid rgba(181,81,47,.2);}
+.result-list{display:flex;flex-direction:column;gap:6px;}
+.result-row{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:9px;border:1px solid var(--line);background:var(--card);}
+.result-row.result-ok{border-color:rgba(92,122,94,.3);background:rgba(92,122,94,.05);}
+.result-row.result-bad{border-color:rgba(181,81,47,.2);background:rgba(181,81,47,.04);}
+.result-num{flex:0 0 22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--mono);background:var(--paper-deep);color:var(--ink-soft);}
+.result-detail{flex:1;font-size:13px;line-height:1.5;}
+.result-status{font-weight:700;color:var(--sage);}
+.result-row.result-bad .result-status{color:var(--rust);}
+.result-correct{color:var(--navy);margin-top:2px;}
+.result-correct strong{font-weight:700;}
+.result-user{color:var(--ink-soft);font-size:12px;margin-top:1px;}
 </style>
 </head>
 <body>
@@ -1208,9 +1225,35 @@ function attachLessonHandlers(lesson){
     submitBtn.className='btn btn-primary btn-block'; submitBtn.style.marginTop='10px';
     submitBtn.textContent='Nộp bài kiểm tra';
     submitBtn.onclick=()=>{
-      const {correct,total}=gradeSection('#quizArea');
+      const {correct,total,results}=gradeSection('#quizArea');
       const pct=Math.round(correct/total*100);
-      document.getElementById('quizScoreMsg').innerHTML=`<div class="ex-feedback show ${pct>=70?'ok':'bad'}" style="margin-top:10px;">Điểm: ${correct}/${total} (${pct}%)</div>`;
+      const color = pct>=70?'ok':'bad';
+      const emoji = pct===100?'🏆':pct>=70?'✅':'📝';
+
+      // Bảng tóm tắt kết quả từng câu
+      let summaryRows = '';
+      if(results && results.length) {
+        results.forEach((r,i)=>{
+          summaryRows += `
+            <div class="result-row ${r.ok?'result-ok':'result-bad'}">
+              <span class="result-num">${i+1}</span>
+              <div class="result-detail">
+                <div class="result-status">${r.ok?'✓ Đúng':'✗ Sai'}</div>
+                ${!r.ok?`<div class="result-correct">Đáp án đúng: <strong>${escapeHtml(r.answer)}</strong></div>`:''}
+                ${!r.ok && r.userVal?`<div class="result-user">Bạn trả lời: <em>${escapeHtml(r.userVal)}</em></div>`:''}
+              </div>
+            </div>`;
+        });
+      }
+
+      document.getElementById('quizScoreMsg').innerHTML=`
+        <div class="quiz-result-box">
+          <div class="quiz-score-header ${color}">
+            ${emoji} Điểm: <strong>${correct}/${total}</strong> (${pct}%)
+            ${pct>=70?'— Xuất sắc! Tiếp tục phát huy.':'— Hãy ôn lại và thử lại lần sau.'}
+          </div>
+          ${summaryRows?`<div class="result-list">${summaryRows}</div>`:''}
+        </div>`;
       submitBtn.disabled=true;
       finishLesson(lesson,lesson._exScore||pct,pct);
       if(lesson.isUnitTestDay){
@@ -1229,6 +1272,7 @@ function attachLessonHandlers(lesson){
 function gradeSection(selector){
   const items=document.querySelectorAll(selector+' .ex-item');
   let correct=0;
+  const results=[];
   items.forEach(item=>{
     const answer=item.getAttribute('data-answer');
     const type=item.getAttribute('data-type')||'';
@@ -1239,6 +1283,7 @@ function gradeSection(selector){
     else { const inp=item.querySelector('.ex-input'); if(inp) userVal=inp.value; }
 
     const ok = checkAnswer(userVal, answer, type);
+    results.push({ ok, answer, userVal: userVal.trim() });
 
     item.querySelectorAll('.opt-btn').forEach(o=>{
       if(normalize(o.getAttribute('data-value'))===normalize(answer)) o.classList.add('correct');
@@ -1250,7 +1295,7 @@ function gradeSection(selector){
     fb.textContent=ok?'✓ Chính xác!':'✗ Đáp án đúng: '+answer;
     const inp=item.querySelector('.ex-input'); if(inp) inp.disabled=true;
   });
-  return {correct,total:items.length||1};
+  return {correct, total:items.length||1, results};
 }
 
 // So sánh đáp án linh hoạt: xử lý apostrophe iOS, câu nhiều chỗ trống (a / The),
