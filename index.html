@@ -434,7 +434,7 @@ const ALL_LESSONS = [
     exercises: [
       { type: "fill-blank", question: "She ___ (work) in the CS team.", answer: "works", hint: "thêm -s vì chủ ngữ là she" },
       { type: "fill-blank", question: "They ___ (not/like) long meetings.", answer: "don't like" },
-      { type: "fill-blank", question: "___ he ___ (handle) APJ accounts?", answer: "Does he handle" },
+      { type: "fill-blank", question: "___ he ___ (handle) APJ accounts?", answer: "Does / handle", hint: "Điền 2 từ: trợ động từ + động từ (Does / handle)" },
       { type: "multiple-choice", question: "Chọn câu đúng:", answer: "He doesn't work on Sundays.", options: ["He don't works on Sundays.", "He doesn't work on Sundays.", "He not works on Sundays."] },
       { type: "translate", question: "Dịch: 'Cô ấy thường kiểm tra email vào buổi sáng.'", answer: "She usually checks emails in the morning." },
       { type: "rewrite", question: "Viết câu phủ định: 'We handle technical issues.'", answer: "We don't handle technical issues." }
@@ -849,7 +849,16 @@ function getNextUnlockedDay() {
 }
 function todayStr(d=new Date()) { return d.toISOString().slice(0,10); }
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function normalize(s) { return String(s).toLowerCase().trim().replace(/\s+/g,' ').replace(/[.,!?]/g,''); }
+function normalize(s) {
+  return String(s)
+    .toLowerCase()
+    .trim()
+    .replace(/[\u2018\u2019\u201C\u201D]/g, "'")  // cong → thẳng
+    .replace(/\s+/g, ' ')
+    .replace(/[.,!?;:]/g, '')
+    .replace(/\s'/g, "'")
+    .replace(/'\s/g, "'");
+}
 function generateSyncCode(name) {
   const clean = name.toUpperCase().replace(/[^A-Z]/g,'').slice(0,4).padEnd(4,'X');
   const rand = Math.floor(1000 + Math.random() * 9000);
@@ -1222,12 +1231,15 @@ function gradeSection(selector){
   let correct=0;
   items.forEach(item=>{
     const answer=item.getAttribute('data-answer');
+    const type=item.getAttribute('data-type')||'';
     const fb=item.querySelector('.ex-feedback');
     let userVal='';
     const sel=item.querySelector('.opt-btn.selected');
     if(sel) userVal=sel.getAttribute('data-value');
     else { const inp=item.querySelector('.ex-input'); if(inp) userVal=inp.value; }
-    const ok=normalize(userVal)===normalize(answer);
+
+    const ok = checkAnswer(userVal, answer, type);
+
     item.querySelectorAll('.opt-btn').forEach(o=>{
       if(normalize(o.getAttribute('data-value'))===normalize(answer)) o.classList.add('correct');
       else if(o.classList.contains('selected')) o.classList.add('wrong');
@@ -1239,6 +1251,40 @@ function gradeSection(selector){
     const inp=item.querySelector('.ex-input'); if(inp) inp.disabled=true;
   });
   return {correct,total:items.length||1};
+}
+
+// So sánh đáp án linh hoạt: xử lý apostrophe iOS, câu nhiều chỗ trống (a / The),
+// câu dịch (chấp nhận đúng ý dù khác từ nhỏ), câu free-response luôn đúng
+function checkAnswer(userVal, answer, type) {
+  if(type === 'free-response') return true;
+
+  const u = normalize(userVal);
+  const a = normalize(answer);
+
+  // Khớp chính xác
+  if(u === a) return true;
+
+  // Câu nhiều chỗ trống kiểu "Does / he / handle" hay "a / The"
+  // Tách theo dấu / hoặc , rồi kiểm tra user có chứa tất cả phần không
+  if(answer.includes('/') || answer.includes(',')) {
+    const parts = answer.split(/[\/,]/).map(p => normalize(p.trim())).filter(Boolean);
+    if(parts.length > 1 && parts.every(p => u.includes(p))) return true;
+  }
+
+  // Câu dịch hoặc câu viết lại: user gõ đủ câu hoàn chỉnh (chứa đáp án)
+  // Chỉ dùng includes khi user nhập đủ dài (≥ 70% độ dài đáp án) để tránh 1 từ khớp 1 phần
+  const minLen = Math.floor(a.length * 0.7);
+  if(u.length >= minLen && (u.includes(a) || a.includes(u))) return true;
+
+  // Xử lý biến thể apostrophe: don't = do not, isn't = is not...
+  const expand = s => s
+    .replace(/don't/g,'do not').replace(/doesn't/g,'does not')
+    .replace(/isn't/g,'is not').replace(/aren't/g,'are not')
+    .replace(/can't/g,'cannot').replace(/won't/g,'will not')
+    .replace(/i'm/g,'i am').replace(/it's/g,'it is');
+  if(expand(u) === expand(a)) return true;
+
+  return false;
 }
 
 function finishLesson(lesson,exScore,quizScore){
@@ -1287,7 +1333,7 @@ function renderReviewView(){
       let userVal='';
       const sel=item.querySelector('.opt-btn.selected');
       if(sel) userVal=sel.getAttribute('data-value'); else { const inp=item.querySelector('.ex-input'); if(inp) userVal=inp.value; }
-      const ok=normalize(userVal)===normalize(answer);
+      const ok=checkAnswer(userVal, answer, '');
       const fb=item.querySelector('.ex-feedback');
       fb.classList.add('show',ok?'ok':'bad');
       fb.textContent=ok?'✓ Chính xác! Khoảng ôn tiếp theo sẽ dài hơn.':'✗ Đáp án đúng: '+answer+'. Sẽ ôn lại sớm hơn.';
