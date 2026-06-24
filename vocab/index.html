@@ -1038,6 +1038,9 @@ function listenFirebaseLive(){
   onValue(userRef(), snap => {
     if(snap.exists()){
       const r = snap.val();
+      // Không ghi đè nếu user đang giữa bài test (tránh mất câu trả lời đang nhập)
+      const ts = _testState[State.currentDay];
+      const isDoingTest = _activeTab==="test" && ts && !ts.submitted && Object.keys(ts.answers||{}).length>0;
       State.progress = {
         completedDays: r.completedDays||{},
         srsCards: r.srsCards||{},
@@ -1045,10 +1048,19 @@ function listenFirebaseLive(){
         lastActiveDate: r.lastActiveDate||null,
         testResults: r.testResults||{}
       };
-      renderAll();
+      saveLocal();
+      if(!isDoingTest) renderAll();
     }
   });
 }
+
+// Pull lại từ Firebase khi user focus/quay lại tab hoặc app (giúp đồng bộ cross-device)
+function onAppFocus(){
+  if(!firebaseReady||!State.userId) return;
+  pullFromFirebase().then(ok=>{ if(ok) renderAll(); });
+}
+document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible") onAppFocus(); });
+window.addEventListener("focus", onAppFocus);
 
 // ============================================================
 // STREAK
@@ -1094,11 +1106,27 @@ if(window.speechSynthesis){ window.speechSynthesis.onvoiceschanged=loadVoices; l
 function speak(text){
   if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  const v = State.speechVoices.find(v=>/en-US|en_US/.test(v.lang)) || State.speechVoices.find(v=>v.lang.startsWith("en"));
-  if(v) u.voice=v;
-  u.lang="en-US"; u.rate=0.92;
-  window.speechSynthesis.speak(u);
+  function doSpeak(){
+    const voices = window.speechSynthesis.getVoices();
+    const u = new SpeechSynthesisUtterance(text);
+    const v = voices.find(v=>/en-US|en_US/.test(v.lang)) || voices.find(v=>v.lang.startsWith("en"));
+    if(v) u.voice=v;
+    u.lang="en-US"; u.rate=0.92;
+    window.speechSynthesis.speak(u);
+  }
+  const voices = window.speechSynthesis.getVoices();
+  if(voices.length>0){
+    doSpeak();
+  } else {
+    let waited=false;
+    const prevHandler=window.speechSynthesis.onvoiceschanged;
+    window.speechSynthesis.onvoiceschanged=function(){
+      if(prevHandler) prevHandler();
+      if(waited) return; waited=true;
+      loadVoices(); doSpeak();
+    };
+    setTimeout(()=>{ if(!waited){ waited=true; doSpeak(); } }, 1500);
+  }
 }
 
 // ============================================================
@@ -1341,8 +1369,9 @@ function renderTestResult(day, ts){
   <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px;">
     ${qs.map((q,i)=>{
       const a=ts.answers[i], ok=q.type==="mc"?a===q.ans:a&&norm(a)===norm(q.ans);
+      const correctText = q.type==="mc" ? q.opts[q.ans] : q.ans;
       return `<div style="font-size:12.5px;padding:8px 12px;border-radius:8px;background:${ok?"rgba(92,122,94,.12)":"rgba(181,81,47,.1)"}">
-        ${ok?"✓":"✗"} ${esc(q.q)}${!ok?` <span style="color:var(--teal);font-weight:600;">→ ${esc(q.ans)}</span>`:""}
+        ${ok?"✓":"✗"} ${esc(q.q)}${!ok?` <span style="color:var(--teal);font-weight:600;">→ ${esc(correctText)}</span>`:""}
       </div>`;
     }).join("")}
   </div>
